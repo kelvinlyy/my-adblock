@@ -1,0 +1,10 @@
+{
+    "extension_name": {
+        "message": "My AdBlock",
+        "description": "The display name for the extension."
+    },
+    "extension_description": {
+        "message": "Blocks ads and trackers using a built-in blocklist and custom rules. View blocked request stats from the toolbar popup.",
+        "description": "Description of what the extension does."
+    }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AdBlock</title>
+    <link rel="stylesheet" href="popup.css">
+    <script src="popup.js" defer></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-icon">🛡</div>
+        <h1>My AdBlock</h1>
+    </header>
+
+    <!-- Stats Summary -->
+    <section class="stats-panel">
+        <div class="stat-card stat-session">
+            <span class="stat-label">Blocked this session</span>
+            <span class="stat-value" id="sessionCount">0</span>
+        </div>
+        <div class="stat-row">
+            <div class="stat-item">
+                <span class="stat-label-sm">All-time blocked</span>
+                <span class="stat-value-sm" id="allTimeCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label-sm">Active rules</span>
+                <span class="stat-value-sm" id="ruleCount">0</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blocked Requests (expandable) -->
+    <section class="section">
+        <button class="section-toggle" id="blockedToggle">
+            <span>Blocked Requests</span>
+            <span class="toggle-arrow" id="blockedArrow">▸</span>
+        </button>
+        <div class="section-body collapsed" id="blockedBody">
+            <div class="blocked-controls">
+                <input type="text" id="searchInput" placeholder="Search URLs…" class="search-input">
+                <button class="btn btn-sm btn-secondary" id="clearSessionBtn">Clear</button>
+            </div>
+            <div class="blocked-list" id="blockedList">
+                <p class="empty-msg">No blocked requests yet.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Rules -->
+    <section class="section">
+        <button class="section-toggle" id="rulesToggle">
+            <span>Custom Rules</span>
+            <span class="toggle-arrow" id="rulesArrow">▸</span>
+        </button>
+        <div class="section-body collapsed" id="rulesBody">
+            <div class="rule-form">
+                <select id="ruleType" class="rule-select">
+                    <option value="host">Host</option>
+                    <option value="pattern">URL Pattern</option>
+                </select>
+                <input type="text" id="ruleValue" placeholder="e.g. ads.example.com" class="rule-input">
+                <button class="btn btn-sm btn-primary" id="addRuleBtn">Add</button>
+            </div>
+            <div id="ruleError" class="rule-error hidden"></div>
+            <div class="import-export-bar">
+                <button class="btn btn-sm btn-secondary" id="exportRulesBtn">⬇ Export</button>
+                <button class="btn btn-sm btn-secondary" id="importRulesBtn">⬆ Import</button>
+                <input type="file" id="importFileInput" accept=".json" class="hidden">
+            </div>
+            <div class="custom-rules-list" id="customRulesList">
+                <p class="empty-msg">No custom rules added.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
