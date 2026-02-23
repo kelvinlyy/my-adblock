@@ -15,6 +15,7 @@ A native **Safari Web Extension** for macOS that blocks ads and tracking request
 | **Network-level Blocking** | Uses the Manifest V3 `declarativeNetRequest` API to block matching requests before any data is sent. |
 | **Cosmetic Filtering** | Hides common ad containers (Google Ads, Taboola, Outbrain, etc.) via injected CSS and DOM removal. |
 | **Blocked-Request Dashboard** | Popup shows a live session counter, all-time total, and a searchable list of blocked URLs. |
+| **Right-Click Blocking** | Right-click any element on a page to block its hostname — a confirmation prompt lets you review and edit before adding. |
 | **Import / Export** | Export custom rules as JSON to your Downloads folder; import rules from a JSON file. |
 
 ---
@@ -178,6 +179,16 @@ Requests to these domains (and all subdomains) are blocked:
 
 Custom rules are persisted across browser sessions and registered as dynamic `declarativeNetRequest` rules.
 
+### Right-Click Blocking
+
+You can also add rules directly from any web page:
+
+1. **Right-click** any element (ad image, iframe, link, etc.) on a page.
+2. Select **"My AdBlock — Block this hostname"** from the context menu.
+3. A prompt appears pre-filled with the element's hostname (e.g. `ads.example.com`).
+4. Review or edit the hostname, then press **OK** to confirm.
+5. The hostname is instantly added as a custom blocking rule and takes effect on the current page.
+
 ### Import / Export
 
 - **Export**: Click ⬇ Export to save your custom rules as a JSON file in your Downloads folder.
@@ -207,6 +218,7 @@ Stats auto-refresh every 3 seconds while the popup is open.
 - [x] Custom rules — add/remove host or URL pattern rules
 - [x] Persist custom rules & register as dynamic DNR rules
 - [x] Import/export custom rules (JSON)
+- [x] Right-click context menu to block hostname from any page
 - [ ] Subscribe to external filter lists (EasyList format)
 - [ ] Per-site allowlist (pause blocking for a specific domain)
 - [ ] Block statistics chart (requests over time)

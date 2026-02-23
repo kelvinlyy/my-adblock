@@ -263,6 +263,147 @@
     }
 
     // ===========================================================
+    // Context menu — confirm & block hostname
+    // ===========================================================
+
+    /** Show a non-blocking toast notification in the corner of the page. */
+    const TOAST_DURATION_MS = 3000;
+
+    function showPageToast(text, isError = false) {
+        const toast = document.createElement("div");
+        toast.textContent = text;
+        Object.assign(toast.style, {
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            zIndex: "2147483647",
+            padding: "12px 20px",
+            borderRadius: "10px",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif",
+            fontSize: "13px",
+            fontWeight: "600",
+            color: "#fff",
+            background: isError ? "rgba(255, 59, 48, 0.92)" : "rgba(0, 122, 255, 0.92)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            opacity: "0",
+            transition: "opacity 0.25s ease",
+            pointerEvents: "none",
+        });
+        (document.body || document.documentElement).appendChild(toast);
+
+        // Fade in
+        requestAnimationFrame(() => { toast.style.opacity = "1"; });
+
+        // Fade out and remove
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 300);
+        }, TOAST_DURATION_MS);
+    }
+
+    // ---------------------
+    // Track the right-clicked element so we can inspect it for iframes
+    // ---------------------
+    let lastContextMenuTarget = null;
+
+    document.addEventListener("contextmenu", (e) => {
+        lastContextMenuTarget = e.target;
+    }, true);
+
+    /**
+     * Extract a hostname from a URL string, or return null.
+     */
+    function hostnameFromUrl(url) {
+        if (!url) return null;
+        try {
+            return new URL(url).hostname || null;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Inspect the right-clicked element and its surroundings for iframe src hostnames.
+     *
+     * Search order:
+     *   1. The element itself (if it's an iframe)
+     *   2. Iframes nested inside the element
+     *   3. Iframes inside the element's parent container (catches clicks on
+     *      wrapper divs that sit next to an ad iframe)
+     *
+     * Returns the first iframe hostname found, or null.
+     */
+    function findIframeHostname(el) {
+        if (!el) return null;
+
+        // 1. Element itself is an iframe
+        if (el.tagName === "IFRAME") {
+            return hostnameFromUrl(el.src);
+        }
+
+        // 2. Iframes nested inside the element
+        const nested = el.querySelectorAll?.("iframe[src]");
+        if (nested && nested.length > 0) {
+            for (const iframe of nested) {
+                const host = hostnameFromUrl(iframe.src);
+                if (host) return host;
+            }
+        }
+
+        // 3. Walk up to the nearest parent container and check its iframes
+        const parent = el.parentElement;
+        if (parent) {
+            const siblings = parent.querySelectorAll?.("iframe[src]");
+            if (siblings && siblings.length > 0) {
+                for (const iframe of siblings) {
+                    const host = hostnameFromUrl(iframe.src);
+                    if (host) return host;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    // ---------------------
+    // Handle confirmBlockHost from background.js
+    // ---------------------
+    browser.runtime.onMessage.addListener((message, _sender) => {
+        if (message.type !== "confirmBlockHost") return;
+
+        // Prefer iframe hostname found near the clicked element
+        const iframeHost = findIframeHostname(lastContextMenuTarget);
+        const hostname = iframeHost || message.hostname;
+
+        const confirmed = prompt(
+            "My AdBlock — Block this hostname?\nEdit if needed, then press OK to block:",
+            hostname
+        );
+
+        if (!confirmed || !confirmed.trim()) return; // user cancelled
+
+        const host = confirmed.trim();
+
+        browser.runtime.sendMessage({
+            type: "addCustomRule",
+            ruleType: "host",
+            value: host,
+        }).then((result) => {
+            if (result.error) {
+                showPageToast(`My AdBlock: ${result.error}`, true);
+            } else {
+                showPageToast(`🛡 "${host}" added to blocklist`);
+                // Refresh the blocklist so new rule takes effect immediately
+                fetchBlocklist();
+            }
+        }).catch((e) => {
+            console.error("[My AdBlock] Failed to add rule from context menu:", e);
+        });
+    });
+
+    // ===========================================================
     // Init
     // ===========================================================
 

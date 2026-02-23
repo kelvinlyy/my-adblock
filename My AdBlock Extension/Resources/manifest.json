@@ -31,9 +31,11 @@
     },
 
     "permissions": [
+        "contextMenus",
         "declarativeNetRequest",
         "nativeMessaging",
         "storage",
+        "tabs",
         "activeTab"
     ],
 

@@ -156,7 +156,7 @@ function recordBlocked(url, matchedRule, ruleType) {
 }
 
 // ---------------------
-// Message handler (popup + content script ↔ background)
+// Message handler (popup + content script <-> background)
 // ---------------------
 browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
     switch (message.type) {
@@ -349,6 +349,67 @@ async function importRules(incomingRules) {
 
     return { success: true, imported: newEntries.length, skipped };
 }
+
+// ---------------------
+// Context menu -- "Block this hostname"
+// Safari may expose contextMenus as browser.menus in some versions.
+// ---------------------
+
+const menus = browser.contextMenus || browser.menus;
+const CONTEXT_MENU_ID = "my-adblock-block-host";
+
+menus.create({
+    id: CONTEXT_MENU_ID,
+    title: "My AdBlock — Block this hostname",
+    contexts: ["all"],
+});
+
+/**
+ * Extract the most relevant hostname from the context menu click info.
+ * Priority: element src URL → link URL → frame URL → page URL.
+ */
+function extractHostname(info) {
+    const candidates = [info.srcUrl, info.linkUrl, info.frameUrl, info.pageUrl];
+    for (const url of candidates) {
+        if (url) {
+            try {
+                return new URL(url).hostname;
+            } catch {
+                // not a valid URL — try next
+            }
+        }
+    }
+    return null;
+}
+
+menus.onClicked.addListener(async (info, tab) => {
+    if (info.menuItemId !== CONTEXT_MENU_ID) return;
+
+    const hostname = extractHostname(info);
+    if (!hostname) return;
+
+    // Resolve target tab — prefer the tab from the callback, fall back to querying the active tab
+    let tabId = tab?.id;
+    if (tabId === undefined) {
+        try {
+            const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
+            tabId = activeTab?.id;
+        } catch {
+            // ignore
+        }
+    }
+    if (tabId === undefined) return;
+
+    // Ask the content script to show a confirmation prompt
+    try {
+        await browser.tabs.sendMessage(tabId, {
+            type: "confirmBlockHost",
+            hostname,
+        });
+    } catch (e) {
+        console.error("[My AdBlock] Failed to send confirmBlockHost to content script:", e);
+    }
+});
 
 // ---------------------
 // Restore dynamic rules & populate cache on startup
