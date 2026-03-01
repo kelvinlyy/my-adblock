@@ -11,7 +11,7 @@ if (menus) {
     try {
         menus.create({
             id: CONTEXT_MENU_ID,
-            title: "My AdBlock — Block this hostname",
+            title: "My AdBlock - Block this hostname",
             contexts: ["page", "link", "image", "video", "audio", "selection", "editable", "frame"],
         });
     } catch (e) {

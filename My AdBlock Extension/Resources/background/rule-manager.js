@@ -139,7 +139,7 @@ async function exportRules() {
 
     const header = [
         "[Adblock Plus 2.0]",
-        `! Title: My AdBlock — Custom Rules`,
+        `! Title: My AdBlock - Custom Rules`,
         `! Exported: ${new Date().toISOString()}`,
         `! Total rules: ${customRules.length}`,
         "",

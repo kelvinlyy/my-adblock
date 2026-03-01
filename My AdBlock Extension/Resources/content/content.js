@@ -82,7 +82,7 @@
 
             // Title
             const title = document.createElement("div");
-            title.textContent = "My AdBlock — Block this hostname?";
+            title.textContent = "My AdBlock - Block this hostname?";
             Object.assign(title.style, {
                 fontWeight: "700", fontSize: "15px", marginBottom: "12px",
             });
@@ -164,14 +164,156 @@
     }
 
     // ===========================================================
+    // Track right-clicked element for iframe hostname detection
+    // ===========================================================
+
+    let lastContextMenuTarget = null;
+
+    document.addEventListener("contextmenu", (e) => {
+        lastContextMenuTarget = e.target;
+    }, true);
+
+    /**
+     * Try to extract a hostname from a URL string.
+     */
+    function hostnameFromUrl(url) {
+        if (!url) return null;
+        try {
+            const h = new URL(url).hostname;
+            return h || null;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Extract the best ad-related hostname from an iframe element.
+     * Handles: src, srcdoc (HTML-encoded URLs inside), data attributes.
+     */
+    function hostnameFromIframe(iframe) {
+        if (!iframe) return null;
+
+        // 1. Standard src attribute
+        const srcHost = hostnameFromUrl(iframe.src);
+        if (srcHost && srcHost !== "about:blank" && srcHost !== location.hostname) {
+            return srcHost;
+        }
+
+        // 2. srcdoc — parse URLs embedded in the HTML-encoded content
+        const srcdoc = iframe.getAttribute("srcdoc");
+        if (srcdoc) {
+            const host = extractHostFromSrcdoc(srcdoc);
+            if (host) return host;
+        }
+
+        // 3. data-* attributes that may contain a source domain
+        for (const attr of iframe.attributes) {
+            if (attr.name.startsWith("data-") && attr.value) {
+                const h = hostnameFromUrl(attr.value);
+                if (h && h !== location.hostname) return h;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse an srcdoc string and extract the most relevant ad hostname.
+     * Looks for https:// URLs in the decoded HTML and picks the first
+     * third-party hostname (skipping the current page's own domain).
+     */
+    function extractHostFromSrcdoc(srcdoc) {
+        // Decode HTML entities so we can find real URLs
+        const decoded = srcdoc
+            .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+            .replace(/&amp;/g, "&").replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+
+        // Match all https:// URLs
+        const urlPattern = /https?:\/\/[^\s"'<>]+/gi;
+        const matches = decoded.match(urlPattern);
+        if (!matches) return null;
+
+        const pageHost = location.hostname;
+        const seen = new Set();
+
+        for (const url of matches) {
+            const host = hostnameFromUrl(url);
+            if (!host || host === pageHost || seen.has(host)) continue;
+            seen.add(host);
+            // Return the first third-party hostname (the ad network)
+            return host;
+        }
+
+        return null;
+    }
+
+    /**
+     * Walk from the right-clicked element to find an iframe and extract
+     * its ad hostname. Handles src, srcdoc, and nearby iframe elements.
+     */
+    function findIframeHostname(el) {
+        if (!el) return null;
+
+        // 1. Clicked directly on an iframe / embed / object
+        if (el.tagName === "IFRAME") {
+            return hostnameFromIframe(el);
+        }
+        if (el.tagName === "EMBED" || el.tagName === "OBJECT") {
+            return hostnameFromUrl(el.src || el.data);
+        }
+
+        // 2. Check child iframes inside the clicked element
+        const children = el.querySelectorAll?.("iframe, embed[src], object[data]");
+        if (children) {
+            for (const child of children) {
+                const host = child.tagName === "IFRAME"
+                    ? hostnameFromIframe(child)
+                    : hostnameFromUrl(child.src || child.data);
+                if (host) return host;
+            }
+        }
+
+        // 3. Walk up to find a parent/sibling iframe
+        let current = el;
+        for (let depth = 0; depth < 5 && current; depth++) {
+            const parent = current.parentElement;
+            if (!parent) break;
+
+            if (parent.tagName === "IFRAME") {
+                return hostnameFromIframe(parent);
+            }
+
+            const siblings = parent.querySelectorAll?.(":scope > iframe, :scope > embed[src], :scope > object[data]");
+            if (siblings) {
+                for (const sib of siblings) {
+                    if (sib === current) continue;
+                    const host = sib.tagName === "IFRAME"
+                        ? hostnameFromIframe(sib)
+                        : hostnameFromUrl(sib.src || sib.data);
+                    if (host) return host;
+                }
+            }
+
+            current = parent;
+        }
+
+        return null;
+    }
+
+    // ===========================================================
     // Handle confirmBlockHost from background.js
     // ===========================================================
 
     browser.runtime.onMessage.addListener((message, _sender) => {
         if (message.type !== "confirmBlockHost") return false;
 
+        // Prefer iframe hostname from the right-clicked element
+        const iframeHost = findIframeHostname(lastContextMenuTarget);
+        const hostname = iframeHost || message.hostname;
+
         // Return a Promise so the message channel stays open
-        return showBlockConfirmModal(message.hostname).then((host) => {
+        return showBlockConfirmModal(hostname).then((host) => {
             if (!host) return { dismissed: true };
 
             return browser.runtime.sendMessage({
