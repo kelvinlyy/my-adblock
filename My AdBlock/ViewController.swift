@@ -5,27 +5,31 @@
 //  Created by Lai Yung Yin on 23/2/2026.
 //
 
-import Cocoa
 import SafariServices
 import WebKit
 
-// MARK: - Constants
-
 private let extensionBundleIdentifier = "com.lyy.My-AdBlock.Extension"
 
-// MARK: - ViewController
+// MARK: - macOS
+
+#if os(macOS)
+import Cocoa
 
 class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
-    @IBOutlet var webView: WKWebView!
+    var webView: WKWebView!
 
-    // MARK: - Lifecycle
+    override func loadView() {
+        let config = WKWebViewConfiguration()
+        config.userContentController.add(self, name: "controller")
+
+        webView = WKWebView(frame: NSRect(x: 0, y: 0, width: 425, height: 325), configuration: config)
+        webView.navigationDelegate = self
+        self.view = webView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        webView.navigationDelegate = self
-        webView.configuration.userContentController.add(self, name: "controller")
 
         guard let fileURL = Bundle.main.url(forResource: "Main", withExtension: "html"),
               let resourceURL = Bundle.main.resourceURL else {
@@ -34,13 +38,9 @@ class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.loadFileURL(fileURL, allowingReadAccessTo: resourceURL)
     }
 
-    // MARK: - WKNavigationDelegate
-
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         SFSafariExtensionManager.getStateOfSafariExtension(withIdentifier: extensionBundleIdentifier) { state, error in
-            guard let state, error == nil else {
-                return
-            }
+            guard let state, error == nil else { return }
 
             let usesSettings: Bool
             if #available(macOS 13, *) {
@@ -55,12 +55,8 @@ class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHan
         }
     }
 
-    // MARK: - WKScriptMessageHandler
-
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let body = message.body as? String, body == "open-preferences" else {
-            return
-        }
+        guard let body = message.body as? String, body == "open-preferences" else { return }
 
         SFSafariApplication.showPreferencesForExtension(withIdentifier: extensionBundleIdentifier) { _ in
             DispatchQueue.main.async {
@@ -69,3 +65,59 @@ class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHan
         }
     }
 }
+
+// MARK: - iOS
+
+#elseif os(iOS)
+import UIKit
+
+class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+
+    var webView: WKWebView!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let config = WKWebViewConfiguration()
+        config.userContentController.add(self, name: "controller")
+
+        webView = WKWebView(frame: view.bounds, configuration: config)
+        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        webView.navigationDelegate = self
+        view.addSubview(webView)
+
+        guard let fileURL = Bundle.main.url(forResource: "Main", withExtension: "html"),
+              let resourceURL = Bundle.main.resourceURL else {
+            return
+        }
+        webView.loadFileURL(fileURL, allowingReadAccessTo: resourceURL)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        #if compiler(>=6.2)
+        if #available(iOS 26.2, *) {
+            SFSafariExtensionManager.getStateOfExtension(withIdentifier: extensionBundleIdentifier) { state, error in
+                guard let state, error == nil else { return }
+
+                DispatchQueue.main.async {
+                    webView.evaluateJavaScript("show(\(state.isEnabled), false)")
+                }
+            }
+            return
+        }
+        #endif
+        DispatchQueue.main.async {
+            webView.evaluateJavaScript("show(undefined, false)")
+        }
+    }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let body = message.body as? String, body == "open-preferences" else { return }
+
+        // On iOS, open Settings app
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+    }
+}
+#endif

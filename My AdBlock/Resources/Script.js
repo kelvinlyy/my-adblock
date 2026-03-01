@@ -6,7 +6,19 @@
  * @param {boolean} useSettingsInsteadOfPreferences – true on macOS 13+ ("Settings" wording).
  */
 function show(enabled, useSettingsInsteadOfPreferences) {
-    if (useSettingsInsteadOfPreferences) {
+    // Detect iOS by checking for touch support
+    var isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.maxTouchPoints > 1);
+
+    if (isIOS) {
+        document.querySelector(".state-on").innerText =
+            "My AdBlock's extension is currently on. You can turn it off in Settings > Safari > Extensions.";
+        document.querySelector(".state-off").innerText =
+            "My AdBlock's extension is currently off. You can turn it on in Settings > Safari > Extensions.";
+        document.querySelector(".state-unknown").innerText =
+            "You can turn on My AdBlock's extension in Settings > Safari > Extensions.";
+        document.querySelector(".open-preferences").innerText =
+            "Open Settings";
+    } else if (useSettingsInsteadOfPreferences) {
         document.querySelector(".state-on").innerText =
             "My AdBlock's extension is currently on. You can turn it off in the Extensions section of Safari Settings.";
         document.querySelector(".state-off").innerText =

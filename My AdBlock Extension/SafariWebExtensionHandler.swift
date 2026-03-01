@@ -46,7 +46,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         }
     }
 
-    // MARK: - Export Rules to Downloads
+    // MARK: - Export Rules
 
     private func handleExportRules(context: NSExtensionContext, message: [String: Any]) {
         guard let jsonString = message["json"] as? String else {
@@ -55,23 +55,29 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         }
 
         let filename = (message["filename"] as? String) ?? "my-adblock-rules.txt"
-
-        // Get the Downloads folder
         let fileManager = FileManager.default
-        guard let downloadsURL = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
-            sendResponse(context: context, data: ["error": "Cannot access Downloads folder"])
+
+        // macOS: use Downloads folder. iOS: use Documents folder.
+        #if os(macOS)
+        let searchPath = FileManager.SearchPathDirectory.downloadsDirectory
+        #else
+        let searchPath = FileManager.SearchPathDirectory.documentDirectory
+        #endif
+
+        guard let baseURL = fileManager.urls(for: searchPath, in: .userDomainMask).first else {
+            sendResponse(context: context, data: ["error": "Cannot access save folder"])
             return
         }
 
-        var fileURL = downloadsURL.appendingPathComponent(filename)
+        var fileURL = baseURL.appendingPathComponent(filename)
 
-        // Avoid overwriting — append a number if file exists
+        // Avoid overwriting - append a number if file exists
         var counter = 1
         let name = (filename as NSString).deletingPathExtension
         let ext = (filename as NSString).pathExtension
         while fileManager.fileExists(atPath: fileURL.path) {
             let newName = "\(name) (\(counter)).\(ext)"
-            fileURL = downloadsURL.appendingPathComponent(newName)
+            fileURL = baseURL.appendingPathComponent(newName)
             counter += 1
         }
 
@@ -99,5 +105,4 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         }
         context.completeRequest(returningItems: [response])
     }
-
 }

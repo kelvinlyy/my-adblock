@@ -1,5 +1,5 @@
 // ============================================================
-// My AdBlock — content.js
+// My AdBlock - content.js
 // Initialisation & orchestration.
 // Modules loaded before this file (via manifest.json content_scripts):
 //   blocklist-matcher.js, cosmetic-filter.js, resource-scanner.js
@@ -173,9 +173,10 @@
         lastContextMenuTarget = e.target;
     }, true);
 
-    /**
-     * Try to extract a hostname from a URL string.
-     */
+    // ===========================================================
+    // Iframe hostname extraction helpers
+    // ===========================================================
+
     function hostnameFromUrl(url) {
         if (!url) return null;
         try {
@@ -186,27 +187,20 @@
         }
     }
 
-    /**
-     * Extract the best ad-related hostname from an iframe element.
-     * Handles: src, srcdoc (HTML-encoded URLs inside), data attributes.
-     */
     function hostnameFromIframe(iframe) {
         if (!iframe) return null;
 
-        // 1. Standard src attribute
         const srcHost = hostnameFromUrl(iframe.src);
         if (srcHost && srcHost !== "about:blank" && srcHost !== location.hostname) {
             return srcHost;
         }
 
-        // 2. srcdoc — parse URLs embedded in the HTML-encoded content
         const srcdoc = iframe.getAttribute("srcdoc");
         if (srcdoc) {
             const host = extractHostFromSrcdoc(srcdoc);
             if (host) return host;
         }
 
-        // 3. data-* attributes that may contain a source domain
         for (const attr of iframe.attributes) {
             if (attr.name.startsWith("data-") && attr.value) {
                 const h = hostnameFromUrl(attr.value);
@@ -217,19 +211,12 @@
         return null;
     }
 
-    /**
-     * Parse an srcdoc string and extract the most relevant ad hostname.
-     * Looks for https:// URLs in the decoded HTML and picks the first
-     * third-party hostname (skipping the current page's own domain).
-     */
     function extractHostFromSrcdoc(srcdoc) {
-        // Decode HTML entities so we can find real URLs
         const decoded = srcdoc
             .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
             .replace(/&amp;/g, "&").replace(/&quot;/g, '"')
             .replace(/&#39;/g, "'");
 
-        // Match all https:// URLs
         const urlPattern = /https?:\/\/[^\s"'<>]+/gi;
         const matches = decoded.match(urlPattern);
         if (!matches) return null;
@@ -241,21 +228,15 @@
             const host = hostnameFromUrl(url);
             if (!host || host === pageHost || seen.has(host)) continue;
             seen.add(host);
-            // Return the first third-party hostname (the ad network)
             return host;
         }
 
         return null;
     }
 
-    /**
-     * Walk from the right-clicked element to find an iframe and extract
-     * its ad hostname. Handles src, srcdoc, and nearby iframe elements.
-     */
     function findIframeHostname(el) {
         if (!el) return null;
 
-        // 1. Clicked directly on an iframe / embed / object
         if (el.tagName === "IFRAME") {
             return hostnameFromIframe(el);
         }
@@ -263,7 +244,6 @@
             return hostnameFromUrl(el.src || el.data);
         }
 
-        // 2. Check child iframes inside the clicked element
         const children = el.querySelectorAll?.("iframe, embed[src], object[data]");
         if (children) {
             for (const child of children) {
@@ -274,7 +254,6 @@
             }
         }
 
-        // 3. Walk up to find a parent/sibling iframe
         let current = el;
         for (let depth = 0; depth < 5 && current; depth++) {
             const parent = current.parentElement;
@@ -302,17 +281,15 @@
     }
 
     // ===========================================================
-    // Handle confirmBlockHost from background.js
+    // Handle confirmBlockHost from background.js (macOS context menu)
     // ===========================================================
 
     browser.runtime.onMessage.addListener((message, _sender) => {
         if (message.type !== "confirmBlockHost") return false;
 
-        // Prefer iframe hostname from the right-clicked element
         const iframeHost = findIframeHostname(lastContextMenuTarget);
         const hostname = iframeHost || message.hostname;
 
-        // Return a Promise so the message channel stays open
         return showBlockConfirmModal(hostname).then((host) => {
             if (!host) return { dismissed: true };
 
@@ -324,7 +301,7 @@
                 if (result.error) {
                     showPageToast(`My AdBlock: ${result.error}`, true);
                 } else {
-                    showPageToast(`🛡 "${host}" added to blocklist`);
+                    showPageToast(`"${host}" added to blocklist`);
                     fetchBlocklist();
                 }
                 return { ok: true };

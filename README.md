@@ -1,6 +1,6 @@
 # My AdBlock
 
-A native **Safari Web Extension** for macOS that blocks ads and tracking requests using a built-in blocklist and user-defined custom rules, with a real-time popup dashboard showing blocked-request statistics.
+A native **Safari Web Extension** for **macOS and iOS** that blocks ads and tracking requests using user-defined custom rules, with a real-time popup dashboard showing blocked-request statistics.
 
 > All filtering happens locally inside the browser — no third-party proxy, no external server.
 
@@ -17,6 +17,7 @@ A native **Safari Web Extension** for macOS that blocks ads and tracking request
 | **Right-Click Blocking** | Right-click any element on a page to block its hostname — an in-page confirmation dialog lets you review and edit before adding. |
 | **Import / Export** | Export custom rules as an EasyList-format text file; import rules from EasyList / Adblock Plus filter lists (`.txt`, `.list`). |
 | **Modular Architecture** | Each file has a single responsibility — background, content, popup, and shared modules are cleanly separated into folders. |
+| **Multiplatform** | Runs on both macOS Safari and iOS Safari from a single codebase. |
 
 ---
 
@@ -117,7 +118,7 @@ My AdBlock/
 
 | Layer | Technology |
 |-------|-----------|
-| Platform | macOS Safari Web Extension (Xcode) |
+| Platform | macOS + iOS Safari Web Extension (Xcode, multiplatform) |
 | Manifest | Manifest V3 |
 | Request Blocking | `declarativeNetRequest` API (dynamic rules) |
 | Background Scripts | `background/` — storage, DNR, rule manager, session tracker, context menu, message router |
@@ -135,23 +136,31 @@ My AdBlock/
 
 ### Prerequisites
 
-- **macOS 12+**
+- **macOS 12+** (for macOS Safari) or **iOS 15+** (for iOS Safari)
 - **Xcode 14+**
-- **Safari 16+** with developer mode enabled
+- **Safari 16+** with developer mode enabled (macOS)
 
 ### Build & Run
 
 1. Open `My AdBlock.xcodeproj` in Xcode.
-2. Select the **My AdBlock** scheme and your Mac as the run destination.
-3. Press **⌘R** to build and run.
-4. In Safari, go to **Settings → Extensions** and enable **My AdBlock**.
-5. Click the 🛡 **My AdBlock** icon in the Safari toolbar to open the popup.
+2. Select the **My AdBlock** scheme.
+3. Choose your run destination — **My Mac** (macOS) or an **iPhone / iPad** simulator or device (iOS).
+4. Press **⌘R** to build and run.
+5. **macOS**: In Safari, go to **Settings → Extensions** and enable **My AdBlock**.
+6. **iOS**: Go to **Settings → Safari → Extensions** and enable **My AdBlock**.
+7. Click the **My AdBlock** icon in the Safari toolbar (macOS) or tap the puzzle icon in Safari's address bar (iOS) to open the popup.
 
 ### Enable Developer Mode (required for unsigned extensions)
 
+**macOS:**
 ```
 Safari → Settings → Advanced → ✅ Show features for web developers
 Safari → Develop → Allow Unsigned Extensions
+```
+
+**iOS:**
+```
+Settings → Safari → Advanced → Web Extensions → Developer Mode → On
 ```
 
 ---
@@ -179,9 +188,9 @@ Even without custom rules, the content script automatically hides common ad elem
 
 Custom rules are persisted across browser sessions and registered as dynamic `declarativeNetRequest` rules.
 
-### Right-Click Blocking
+### Right-Click Blocking (macOS only)
 
-You can also add rules directly from any web page:
+You can also add rules directly from any web page on macOS:
 
 1. **Right-click** any element (ad image, iframe, link, etc.) on a page.
 2. Select **"My AdBlock — Block this hostname"** from the context menu.
@@ -220,6 +229,7 @@ Stats auto-refresh every 3 seconds while the popup is open.
 - [x] Right-click context menu to block hostname from any page
 - [x] Cosmetic filtering — CSS injection & DOM removal
 - [x] Modular SRP architecture — background, content, popup, shared folders
+- [x] Multiplatform support — macOS and iOS from a single codebase
 - [ ] Subscribe to external filter lists (EasyList URL subscription)
 - [ ] Per-site allowlist (pause blocking for a specific domain)
 - [ ] Block statistics chart (requests over time)
