@@ -211,7 +211,7 @@ body {
 .section-body.expanded {
     max-height: 300px;
     overflow-y: hidden;
-    padding: 0 16px 12px;
+    padding: 8px 16px 12px;
 }
 
 /* ---------------------

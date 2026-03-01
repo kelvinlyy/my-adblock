@@ -88,7 +88,11 @@
 			);
 			explicitFolders = (
 				Resources/_locales,
+				Resources/background,
+				Resources/content,
 				Resources/images,
+				Resources/popup,
+				Resources/shared,
 			);
 			path = "My AdBlock Extension";
 			sourceTree = "<group>";

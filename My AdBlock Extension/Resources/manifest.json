@@ -7,34 +7,51 @@
     "version": "1.0",
 
     "icons": {
-        "48": "images/icon-48.png",
-        "96": "images/icon-96.png",
+        "40": "images/icon-40.png",
+        "64": "images/icon-64.png",
         "128": "images/icon-128.png",
         "256": "images/icon-256.png",
         "512": "images/icon-512.png"
     },
 
     "background": {
-        "scripts": [ "background.js" ],
-        "type": "module"
+        "scripts": [
+            "background/storage.js",
+            "background/dnr.js",
+            "shared/easylist-parser.js",
+            "background/rule-manager.js",
+            "background/session-tracker.js",
+            "background/context-menu.js",
+            "background/background.js"
+        ]
     },
 
     "content_scripts": [{
-        "js": [ "content.js" ],
+        "js": [
+            "content/blocklist-matcher.js",
+            "content/cosmetic-filter.js",
+            "content/resource-scanner.js",
+            "content/content.js"
+        ],
         "matches": [ "<all_urls>" ],
         "run_at": "document_end"
     }],
 
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": "images/toolbar-icon.svg"
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "images/toolbar-icon-16.png",
+            "20": "images/toolbar-icon-20.png",
+            "32": "images/toolbar-icon-32.png",
+            "38": "images/toolbar-icon-38.png"
+        }
     },
 
     "permissions": [
         "contextMenus",
         "declarativeNetRequest",
-        "nativeMessaging",
         "storage",
+        "activeTab",
         "tabs"
     ],
 

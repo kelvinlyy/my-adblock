@@ -1,4 +1,4 @@
-# 🛡 My AdBlock
+# My AdBlock
 
 A native **Safari Web Extension** for macOS that blocks ads and tracking requests using a built-in blocklist and user-defined custom rules, with a real-time popup dashboard showing blocked-request statistics.
 
@@ -10,13 +10,13 @@ A native **Safari Web Extension** for macOS that blocks ads and tracking request
 
 | Feature | Description |
 |---------|-------------|
-| **Built-in Blocklist** | Ships with 30 known ad/tracking hosts and 14 URL path patterns blocked via `declarativeNetRequest` static rules. |
 | **Custom Rules** | Add your own hosts or URL patterns directly from the popup — no code changes or restarts needed. |
 | **Network-level Blocking** | Uses the Manifest V3 `declarativeNetRequest` API to block matching requests before any data is sent. |
 | **Cosmetic Filtering** | Hides common ad containers (Google Ads, Taboola, Outbrain, etc.) via injected CSS and DOM removal. |
 | **Blocked-Request Dashboard** | Popup shows a live session counter, all-time total, and a searchable list of blocked URLs. |
-| **Right-Click Blocking** | Right-click any element on a page to block its hostname — a confirmation prompt lets you review and edit before adding. |
-| **Import / Export** | Export custom rules as JSON to your Downloads folder; import rules from a JSON file. |
+| **Right-Click Blocking** | Right-click any element on a page to block its hostname — an in-page confirmation dialog lets you review and edit before adding. |
+| **Import / Export** | Export custom rules as an EasyList-format text file; import rules from EasyList / Adblock Plus filter lists (`.txt`, `.list`). |
+| **Modular Architecture** | Each file has a single responsibility — background, content, popup, and shared modules are cleanly separated into folders. |
 
 ---
 
@@ -27,32 +27,33 @@ Browser makes a request
         │
         ▼
 ┌──────────────────────────────┐
-│  declarativeNetRequest       │  ◄── Static rules (rules.json)
-│  Rule Engine (browser-level) │      + dynamic custom rules
+│  declarativeNetRequest       │  ◄── Dynamic custom rules
+│  Rule Engine (browser-level) │      (registered via rule-manager.js)
 └──────────┬───────────────────┘
            │  Match → Block (no network call)
            │  No match ↓
 ┌──────────────────────────────┐
-│  content.js                  │  ◄── Cosmetic filtering
-│  Hide ad elements + detect   │      + PerformanceObserver
-│  blocked resource loads      │      reports to background.js
+│  content scripts             │  ◄── Cosmetic filtering
+│  blocklist-matcher.js        │      (cosmetic-filter.js)
+│  cosmetic-filter.js          │  ◄── PerformanceObserver
+│  resource-scanner.js         │      reports to background
 └──────────┬───────────────────┘
            │
 ┌──────────────────────────────┐
-│  background.js               │  Increments blocked count,
-│  Event Logger                │  logs URL + matched rule
+│  background scripts          │  Increments blocked count,
+│  session-tracker.js          │  logs URL + matched rule
+│  rule-manager.js             │  manages custom rule CRUD
 └──────────────────────────────┘
            │
            ▼
-    popup.js reads stats
-    and renders dashboard
+    popup scripts read stats
+    and render dashboard
 ```
 
-1. **Static rules** (`rules.json`) block known ad hosts and URL patterns at the browser engine level.
-2. **Dynamic rules** (user-added via popup) are registered with `declarativeNetRequest.updateDynamicRules` and persisted in `browser.storage.local`.
-3. **content.js** injects CSS to hide ad containers, monitors resource loads via `PerformanceObserver` + `MutationObserver`, and reports blocked URLs to the background service worker.
-4. **background.js** maintains session and all-time counters, manages custom rule CRUD, and handles import/export.
-5. **popup.js** fetches stats and renders the dashboard with auto-refresh.
+1. **Dynamic rules** (user-added via popup or right-click context menu) are registered with `declarativeNetRequest.updateDynamicRules` and persisted in `browser.storage.local`.
+2. **Content scripts** inject CSS to hide ad containers (`cosmetic-filter.js`), monitor resource loads via `PerformanceObserver` + `MutationObserver` (`resource-scanner.js`), match URLs against the blocklist (`blocklist-matcher.js`), and report blocked URLs to the background.
+3. **Background scripts** maintain session and all-time counters (`session-tracker.js`), manage custom rule CRUD (`rule-manager.js`), handle DNR registration (`dnr.js`), and route messages (`background.js`).
+4. **Popup scripts** fetch stats and render the dashboard with auto-refresh.
 
 ---
 
@@ -78,13 +79,29 @@ My AdBlock/
 │   ├── My_AdBlock_Extension.entitlements
 │   └── Resources/
 │       ├── manifest.json               # Extension manifest (Manifest V3)
-│       ├── background.js               # Service worker — blocking logic & stats
-│       ├── content.js                  # Content script — cosmetic filtering & detection
-│       ├── popup.html                  # Toolbar popup UI
-│       ├── popup.js                    # Popup logic — stats & custom rule management
-│       ├── popup.css                   # Popup styles (light/dark mode)
-│       ├── rules.json                  # Static declarativeNetRequest rules (43 rules)
-│       ├── images/                     # Extension icons (48–512px + toolbar SVG)
+│       ├── background/                 # Background service worker scripts
+│       │   ├── storage.js              #   Storage read/write helpers
+│       │   ├── dnr.js                  #   declarativeNetRequest helpers
+│       │   ├── rule-manager.js         #   Rule CRUD, import/export
+│       │   ├── session-tracker.js      #   Blocked request session tracking
+│       │   ├── context-menu.js         #   Right-click "Block hostname" menu
+│       │   └── background.js           #   Message router & init
+│       ├── content/                    # Content scripts (injected into pages)
+│       │   ├── blocklist-matcher.js    #   URL matching & reporting
+│       │   ├── cosmetic-filter.js      #   Ad element CSS hiding & DOM removal
+│       │   ├── resource-scanner.js     #   PerformanceObserver & DOM scanning
+│       │   └── content.js             #   Context menu handler & init
+│       ├── popup/                      # Extension popup UI
+│       │   ├── popup.html              #   Popup markup
+│       │   ├── popup.css               #   Popup styles (light/dark mode)
+│       │   ├── popup-ui.js             #   Toggle/toast/formatting utilities
+│       │   ├── popup-stats.js          #   Stats loading & rendering
+│       │   ├── popup-blocked.js        #   Blocked requests list
+│       │   ├── popup-rules.js          #   Custom rules management
+│       │   └── popup.js                #   Init & orchestration
+│       ├── shared/                     # Shared modules
+│       │   └── easylist-parser.js      #   EasyList / Adblock Plus filter parser
+│       ├── images/                     # Extension icons (48–512px + toolbar)
 │       └── _locales/en/messages.json   # Localization strings
 │
 ├── My AdBlockTests/                    # Unit tests
@@ -102,10 +119,11 @@ My AdBlock/
 |-------|-----------|
 | Platform | macOS Safari Web Extension (Xcode) |
 | Manifest | Manifest V3 |
-| Request Blocking | `declarativeNetRequest` API (static + dynamic rules) |
-| Background Logic | `background.js` (Service Worker) |
-| Content Script | `content.js` (PerformanceObserver, MutationObserver, CSS injection) |
-| Popup UI | `popup.html` / `popup.js` / `popup.css` |
+| Request Blocking | `declarativeNetRequest` API (dynamic rules) |
+| Background Scripts | `background/` — storage, DNR, rule manager, session tracker, context menu, message router |
+| Content Scripts | `content/` — blocklist matcher, cosmetic filter, resource scanner, init |
+| Popup UI | `popup/` — HTML, CSS, stats, blocked list, rules management, orchestration |
+| Shared | `shared/easylist-parser.js` — EasyList / Adblock Plus filter parser |
 | Persistence | `browser.storage.local` |
 | Native Messaging | `SafariWebExtensionHandler.swift` (file export) |
 | Native Wrapper | Swift / AppKit |
@@ -137,35 +155,17 @@ Safari → Develop → Allow Unsigned Extensions
 ```
 
 ---
+---
 
-## 🛡 Built-in Blocklist
+## 🛡 Cosmetic Filtering
 
-### Blocked Hosts (30 domains)
+Even without custom rules, the content script automatically hides common ad elements via CSS injection and DOM removal. Targeted selectors include:
 
-Requests to these domains (and all subdomains) are blocked:
-
-| | | |
-|---|---|---|
-| doubleclick.net | googleadservices.com | googlesyndication.com |
-| adservice.google.com | ads.yahoo.com | adnxs.com |
-| adsafeprotected.com | moatads.com | outbrain.com |
-| taboola.com | scorecardresearch.com | quantserve.com |
-| adzerk.net | rubiconproject.com | pubmatic.com |
-| openx.net | criteo.com | bluekai.com |
-| exelate.com | zergnet.com | amazon-adsystem.com |
-| advertising.com | bidswitch.net | casalemedia.com |
-| demdex.net | mathtag.com | serving-sys.com |
-| turn.com | medianet.com | sharethrough.com |
-
-### Blocked URL Path Patterns (13 patterns)
-
-| Pattern | Pattern | Pattern |
-|---------|---------|---------|
-| `/ads/` | `/ad/` | `/adserver/` |
-| `/advertising/` | `/tracking/` | `/tracker/` |
-| `/analytics/` | `/pixel/` | `/beacon/` |
-| `/telemetry/` | `/pagead/` | `/adsense/` |
-| `/adclick/` | `/sponsored/` | |
+- **Google Ads** — `ins.adsbygoogle`, `[id^="google_ads"]`, `[id^="div-gpt-ad"]`
+- **Third-party widgets** — Taboola, Outbrain (`[class*="taboola"]`, `[class*="outbrain"]`)
+- **Common ad containers** — `.ad-container`, `.ad-wrapper`, `.ad-banner`, `.advertisement`, `.sponsored-content`, etc.
+- **Data attributes** — `[data-ad]`, `[data-ad-slot]`, `[data-google-query-id]`
+- **ARIA labels** — `[aria-label="advertisement"]`, `[aria-label="Sponsored"]`
 
 ---
 
@@ -185,14 +185,14 @@ You can also add rules directly from any web page:
 
 1. **Right-click** any element (ad image, iframe, link, etc.) on a page.
 2. Select **"My AdBlock — Block this hostname"** from the context menu.
-3. A prompt appears pre-filled with the element's hostname (e.g. `ads.example.com`).
-4. Review or edit the hostname, then press **OK** to confirm.
+3. An in-page confirmation dialog appears pre-filled with the element's hostname (e.g. `ads.example.com`).
+4. Review or edit the hostname, then press **Block** to confirm (or **Cancel** / Escape to dismiss).
 5. The hostname is instantly added as a custom blocking rule and takes effect on the current page.
 
 ### Import / Export
 
-- **Export**: Click ⬇ Export to save your custom rules as a JSON file in your Downloads folder.
-- **Import**: Click ⬆ Import to load rules from a previously exported JSON file.
+- **Export**: Click ⬇ Export to save your custom rules as an EasyList-format text file to your Downloads folder.
+- **Import**: Click ⬆ Import to load rules from an EasyList / Adblock Plus filter list (`.txt` or `.list` files).
 
 ---
 
@@ -202,7 +202,7 @@ The popup (toolbar icon) serves as the main dashboard:
 
 - **Session blocked count** — large counter showing blocks since Safari launched.
 - **All-time blocked** — persistent counter across all sessions.
-- **Active rules** — total count (built-in + custom).
+- **Active rules** — total count of custom rules.
 - **Blocked Requests** — expandable, searchable list with timestamps and matched rules.
 - **Clear** — resets the session counter and list.
 
@@ -212,14 +212,15 @@ Stats auto-refresh every 3 seconds while the popup is open.
 
 ## 🗺 Roadmap
 
-- [x] Static blocklist via `declarativeNetRequest` (`rules.json`)
 - [x] Background service worker — block event logging & counters
 - [x] Popup dashboard — stats summary & blocked-request list
 - [x] Custom rules — add/remove host or URL pattern rules
 - [x] Persist custom rules & register as dynamic DNR rules
-- [x] Import/export custom rules (JSON)
+- [x] Import/export custom rules (EasyList text format)
 - [x] Right-click context menu to block hostname from any page
-- [ ] Subscribe to external filter lists (EasyList format)
+- [x] Cosmetic filtering — CSS injection & DOM removal
+- [x] Modular SRP architecture — background, content, popup, shared folders
+- [ ] Subscribe to external filter lists (EasyList URL subscription)
 - [ ] Per-site allowlist (pause blocking for a specific domain)
 - [ ] Block statistics chart (requests over time)
 
