@@ -37,6 +37,9 @@ const importFileInput = document.getElementById("importFileInput");
 // State
 // ---------------------
 let currentBlockedRequests = [];
+let rulesCurrentPage = 1;
+let rulesSearchQuery = "";
+const RULES_PAGE_SIZE = 50;
 
 // ---------------------
 // Constants
@@ -82,17 +85,26 @@ function showToast(msg, { isError = true } = {}) {
 // Toggle section expand / collapse
 // ---------------------
 
-function setupToggle(toggleBtn, arrowEl, bodyEl) {
+function setupAccordion(toggleBtn, arrowEl, bodyEl, otherArrowEl, otherBodyEl) {
     toggleBtn.addEventListener("click", () => {
         const isCollapsed = bodyEl.classList.contains("collapsed");
+
+        // Toggle this section
         bodyEl.classList.toggle("collapsed", !isCollapsed);
         bodyEl.classList.toggle("expanded", isCollapsed);
         arrowEl.classList.toggle("expanded", isCollapsed);
+
+        // If expanding, collapse the other section
+        if (isCollapsed) {
+            otherBodyEl.classList.add("collapsed");
+            otherBodyEl.classList.remove("expanded");
+            otherArrowEl.classList.remove("expanded");
+        }
     });
 }
 
-setupToggle(blockedToggle, blockedArrow, blockedBody);
-setupToggle(rulesToggle, rulesArrow, rulesBody);
+setupAccordion(blockedToggle, blockedArrow, blockedBody, rulesArrow, rulesBody);
+setupAccordion(rulesToggle, rulesArrow, rulesBody, blockedArrow, blockedBody);
 
 // ---------------------
 // Load stats from background
@@ -111,7 +123,7 @@ async function loadStats() {
 
     try {
         const counts = await browser.runtime.sendMessage({ type: "getRuleCounts" });
-        ruleCountEl.textContent = `${counts.total} (${counts.builtinCount} + ${counts.customCount})`;
+        ruleCountEl.textContent = counts.total;
     } catch (e) {
         console.error("Failed to load rule counts:", e);
     }
@@ -185,10 +197,18 @@ clearSessionBtn.addEventListener("click", async () => {
 // Custom rules — load & render
 // ---------------------
 
-async function loadCustomRules() {
+async function loadCustomRules(page) {
+    if (page !== undefined) rulesCurrentPage = page;
     try {
-        const result = await browser.runtime.sendMessage({ type: "getCustomRules" });
+        const result = await browser.runtime.sendMessage({
+            type: "getCustomRules",
+            page: rulesCurrentPage,
+            pageSize: RULES_PAGE_SIZE,
+            search: rulesSearchQuery,
+        });
+        rulesCurrentPage = result.page;
         renderCustomRules(result.rules || []);
+        renderRulesPagination(result.page, result.totalPages, result.totalCount);
     } catch (e) {
         console.error("Failed to load custom rules:", e);
     }
@@ -196,7 +216,10 @@ async function loadCustomRules() {
 
 function renderCustomRules(rules) {
     if (!rules || rules.length === 0) {
-        customRulesList.innerHTML = '<p class="empty-msg">No custom rules added.</p>';
+        const msg = rulesSearchQuery
+            ? `No rules matching "${rulesSearchQuery}".`
+            : "No custom rules added.";
+        customRulesList.innerHTML = `<p class="empty-msg">${msg}</p>`;
         return;
     }
 
@@ -229,6 +252,25 @@ function renderCustomRules(rules) {
     customRulesList.appendChild(fragment);
 }
 
+function renderRulesPagination(page, totalPages, totalCount) {
+    const paginationEl = document.getElementById("rulesPagination");
+    if (!paginationEl) return;
+
+    if (totalCount === 0) {
+        paginationEl.classList.add("hidden");
+        return;
+    }
+    paginationEl.classList.remove("hidden");
+
+    const prevBtn = document.getElementById("rulesPrevBtn");
+    const nextBtn = document.getElementById("rulesNextBtn");
+    const pageInfo = document.getElementById("rulesPageInfo");
+
+    pageInfo.textContent = `Page ${page} / ${totalPages}  (${totalCount.toLocaleString()} rules)`;
+    prevBtn.disabled = page <= 1;
+    nextBtn.disabled = page >= totalPages;
+}
+
 // ---------------------
 // Add custom rule
 // ---------------------
@@ -256,7 +298,7 @@ async function handleAddRule() {
         }
 
         ruleValueInput.value = "";
-        await loadCustomRules();
+        await loadCustomRules(1);
         await loadStats();
     } catch (e) {
         showToast("Failed to add rule.");
@@ -296,6 +338,54 @@ ruleTypeSelect.addEventListener("change", () => {
 });
 
 // ---------------------
+// Clear all rules
+// ---------------------
+
+let clearAllPending = false;
+let clearAllTimer = null;
+
+document.getElementById("clearAllRulesBtn")?.addEventListener("click", async () => {
+    const btn = document.getElementById("clearAllRulesBtn");
+    if (!btn) return;
+
+    // First click — ask for confirmation
+    if (!clearAllPending) {
+        clearAllPending = true;
+        btn.textContent = "Confirm?";
+        btn.classList.add("btn-danger-confirm");
+
+        // Reset after 3 seconds if not confirmed
+        clearAllTimer = setTimeout(() => {
+            clearAllPending = false;
+            btn.textContent = "✕ Clear All";
+            btn.classList.remove("btn-danger-confirm");
+        }, 3000);
+        return;
+    }
+
+    // Second click — confirmed
+    clearAllPending = false;
+    clearTimeout(clearAllTimer);
+    btn.textContent = "✕ Clear All";
+    btn.classList.remove("btn-danger-confirm");
+
+    try {
+        showToast("Clearing all rules…", { isError: false });
+        const result = await browser.runtime.sendMessage({ type: "clearAllRules" });
+        if (result.error) {
+            showToast(result.error);
+            return;
+        }
+        showToast("All rules cleared.", { isError: false });
+        await loadCustomRules(1);
+        await loadStats();
+    } catch (e) {
+        showToast("Failed to clear rules.");
+        console.error(e);
+    }
+});
+
+// ---------------------
 // Export rules
 // ---------------------
 
@@ -307,12 +397,12 @@ exportRulesBtn.addEventListener("click", async () => {
             return;
         }
 
-        const json = JSON.stringify(result.data, null, 2);
-        const filename = `my-adblock-rules-${new Date().toISOString().slice(0, 10)}.json`;
+        const text = result.data.text;
+        const filename = `my-adblock-rules-${new Date().toISOString().slice(0, 10)}.txt`;
 
         const nativeResp = await browser.runtime.sendNativeMessage("application.id", {
             action: "exportRules",
-            json,
+            json: text,
             filename,
         });
 
@@ -322,7 +412,7 @@ exportRulesBtn.addEventListener("click", async () => {
         }
 
         showToast(
-            `${result.data.rules.length} rule(s) exported to ${nativeResp.path || "Downloads"}.`,
+            `${result.data.count} rule(s) exported to ${nativeResp.path || "Downloads"}.`,
             { isError: false }
         );
     } catch (e) {
@@ -335,6 +425,8 @@ exportRulesBtn.addEventListener("click", async () => {
 // Import rules
 // ---------------------
 
+const IMPORT_BATCH_SIZE = 500;
+
 importRulesBtn.addEventListener("click", () => importFileInput.click());
 
 importFileInput.addEventListener("change", async (e) => {
@@ -345,40 +437,94 @@ importFileInput.addEventListener("change", async (e) => {
     importFileInput.value = "";
 
     try {
+        showToast("Parsing EasyList file…", { isError: false });
+
         const text = await file.text();
 
-        let parsed;
-        try {
-            parsed = JSON.parse(text);
-        } catch {
-            showToast("Invalid JSON file.");
+        // Parse EasyList text locally (uses shared easylist-parser.js)
+        const rules = parseEasyList(text);
+
+        if (!rules || rules.length === 0) {
+            showToast("No valid EasyList rules found in file.");
             return;
         }
 
-        // Support both { rules: [...] } and plain array [...]
-        const rules = Array.isArray(parsed) ? parsed : parsed.rules;
-        if (!Array.isArray(rules)) {
-            showToast("No rules array found in file.");
+        showToast(`Parsed ${rules.length} rules. Importing…`, { isError: false });
+
+        // Send to background in batches
+        let totalImported = 0;
+        let totalSkipped = 0;
+
+        for (let i = 0; i < rules.length; i += IMPORT_BATCH_SIZE) {
+            const batch = rules.slice(i, i + IMPORT_BATCH_SIZE);
+            const result = await browser.runtime.sendMessage({
+                type: "importRulesBatch",
+                rules: batch,
+            });
+
+            if (result.error) {
+                showToast(`Batch error: ${result.error}`);
+                return;
+            }
+
+            totalImported += result.imported || 0;
+            totalSkipped += result.skipped || 0;
+
+            // Update progress
+            const pct = Math.min(100, Math.round(((i + batch.length) / rules.length) * 100));
+            showToast(`Importing… ${pct}% (${totalImported} added)`, { isError: false });
+        }
+
+        if (totalImported === 0) {
+            showToast(`No new rules imported (${totalSkipped} skipped as duplicates).`);
             return;
         }
 
-        const result = await browser.runtime.sendMessage({ type: "importRules", rules });
+        // Finalize: register DNR rules
+        showToast("Registering rules…", { isError: false });
+        const finalResult = await browser.runtime.sendMessage({ type: "importFinalize" });
 
-        if (result.error) {
-            showToast(result.error);
-            return;
+        let msg = `Imported ${totalImported} rule(s)`;
+        if (totalSkipped > 0) msg += `, ${totalSkipped} skipped`;
+        if (finalResult.dnrRegistered != null) {
+            const contentOnly = finalResult.total - finalResult.dnrRegistered;
+            if (contentOnly > 0) msg += ` (${finalResult.dnrRegistered} engine, ${contentOnly} script)`;
         }
-
-        const msg = `Imported ${result.imported} rule(s)` +
-            (result.skipped > 0 ? `, ${result.skipped} skipped` : "") + ".";
+        msg += ".";
         showToast(msg, { isError: false });
 
-        await loadCustomRules();
+        await loadCustomRules(1);
         await loadStats();
     } catch (e) {
         showToast("Failed to import rules.");
         console.error(e);
     }
+});
+
+// ---------------------
+// Rules search
+// ---------------------
+
+let rulesSearchTimer = null;
+
+document.getElementById("rulesSearchInput")?.addEventListener("input", (e) => {
+    clearTimeout(rulesSearchTimer);
+    rulesSearchTimer = setTimeout(() => {
+        rulesSearchQuery = e.target.value.trim();
+        loadCustomRules(1); // reset to page 1 on new search
+    }, 300);
+});
+
+// ---------------------
+// Pagination controls
+// ---------------------
+
+document.getElementById("rulesPrevBtn")?.addEventListener("click", () => {
+    if (rulesCurrentPage > 1) loadCustomRules(rulesCurrentPage - 1);
+});
+
+document.getElementById("rulesNextBtn")?.addEventListener("click", () => {
+    loadCustomRules(rulesCurrentPage + 1);
 });
 
 // ---------------------

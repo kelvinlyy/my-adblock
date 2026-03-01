@@ -56,14 +56,16 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
         let filename = (message["filename"] as? String) ?? "my-adblock-rules.json"
 
-        // Get the Downloads folder
         let fileManager = FileManager.default
-        guard let downloadsURL = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
-            sendResponse(context: context, data: ["error": "Cannot access Downloads folder"])
+        let downloadsURL = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+
+        guard let baseURL = downloadsURL ?? documentsURL else {
+            sendResponse(context: context, data: ["error": "Cannot access export folder"])
             return
         }
 
-        var fileURL = downloadsURL.appendingPathComponent(filename)
+        var fileURL = baseURL.appendingPathComponent(filename)
 
         // Avoid overwriting — append a number if file exists
         var counter = 1
@@ -71,7 +73,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         let ext = (filename as NSString).pathExtension
         while fileManager.fileExists(atPath: fileURL.path) {
             let newName = "\(name) (\(counter)).\(ext)"
-            fileURL = downloadsURL.appendingPathComponent(newName)
+            fileURL = baseURL.appendingPathComponent(newName)
             counter += 1
         }
 

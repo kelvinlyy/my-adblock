@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My AdBlock</title>
     <link rel="stylesheet" href="popup.css">
+    <script src="easylist-parser.js" defer></script>
     <script src="popup.js" defer></script>
 </head>
 <body>
@@ -69,10 +70,17 @@
             <div class="import-export-bar">
                 <button class="btn btn-sm btn-secondary" id="exportRulesBtn">⬇ Export</button>
                 <button class="btn btn-sm btn-secondary" id="importRulesBtn">⬆ Import</button>
-                <input type="file" id="importFileInput" accept=".json" class="hidden">
+                <button class="btn btn-sm btn-danger" id="clearAllRulesBtn">✕ Clear All</button>
+                <input type="file" id="importFileInput" accept=".txt,.list" class="hidden">
             </div>
+            <input type="text" id="rulesSearchInput" placeholder="Search rules…" class="search-input rules-search">
             <div class="custom-rules-list" id="customRulesList">
                 <p class="empty-msg">No custom rules added.</p>
+            </div>
+            <div class="rules-pagination hidden" id="rulesPagination">
+                <button class="btn btn-sm btn-secondary" id="rulesPrevBtn" disabled>◀ Prev</button>
+                <span class="rules-page-info" id="rulesPageInfo">Page 1 / 1</span>
+                <button class="btn btn-sm btn-secondary" id="rulesNextBtn" disabled>Next ▶</button>
             </div>
         </div>
     </section>

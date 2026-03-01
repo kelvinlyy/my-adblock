@@ -13,6 +13,15 @@ const DYNAMIC_RULE_ID_START = 10000;
 const SESSION_LOG_MAX = 5000;
 const SESSION_LOG_TRIM = 4000;
 
+/**
+ * Safari allows up to 30 000 combined dynamic + session rules.
+ * We reserve a small buffer so other operations don't fail.
+ */
+const MAX_DYNAMIC_RULES = 29500;
+
+/** Max rules per single updateDynamicRules call to avoid timeouts. */
+const DNR_BATCH_SIZE = 5000;
+
 /** Resource types applied to every blocking rule. */
 const DNR_RESOURCE_TYPES = [
     "script", "image", "xmlhttprequest", "sub_frame",
@@ -20,66 +29,10 @@ const DNR_RESOURCE_TYPES = [
 ];
 
 // ---------------------
-// Built-in blocklist (mirrors rules.json — used by content script)
-// ---------------------
-const BLOCKED_HOSTS = [
-    "doubleclick.net",
-    "googleadservices.com",
-    "googlesyndication.com",
-    "adservice.google.com",
-    "ads.yahoo.com",
-    "adnxs.com",
-    "adsafeprotected.com",
-    "moatads.com",
-    "outbrain.com",
-    "taboola.com",
-    "scorecardresearch.com",
-    "quantserve.com",
-    "adzerk.net",
-    "rubiconproject.com",
-    "pubmatic.com",
-    "openx.net",
-    "criteo.com",
-    "bluekai.com",
-    "exelate.com",
-    "zergnet.com",
-    "amazon-adsystem.com",
-    "advertising.com",
-    "bidswitch.net",
-    "casalemedia.com",
-    "demdex.net",
-    "mathtag.com",
-    "serving-sys.com",
-    "turn.com",
-    "medianet.com",
-    "sharethrough.com",
-];
-
-const BLOCKED_PATH_PATTERNS = [
-    "/ads/",
-    "/ad/",
-    "/adserver/",
-    "/advertising/",
-    "/tracking/",
-    "/tracker/",
-    "/analytics/",
-    "/pixel/",
-    "/beacon/",
-    "/telemetry/",
-    "/pagead/",
-    "/adsense/",
-    "/adclick/",
-    "/sponsored/",
-];
-
-// ---------------------
 // Session state
 // ---------------------
 let sessionBlockedCount = 0;
 let sessionBlockedRequests = []; // { url, timestamp, matchedRule, ruleType }
-
-// In-memory cache of custom rules for content script
-let customRulesCache = [];
 
 // ---------------------
 // Helpers
@@ -91,10 +44,14 @@ async function getStoredCustomRules() {
     return data[STORAGE_KEY_CUSTOM_RULES] || [];
 }
 
-/** Persist custom rules and update cache. */
+/** Persist custom rules to storage. */
 async function saveCustomRules(rules) {
-    await browser.storage.local.set({ [STORAGE_KEY_CUSTOM_RULES]: rules });
-    customRulesCache = rules;
+    try {
+        await browser.storage.local.set({ [STORAGE_KEY_CUSTOM_RULES]: rules });
+    } catch (e) {
+        console.error("[My AdBlock] Failed to save rules:", e.message);
+        throw e;
+    }
 }
 
 /** Compute the `urlFilter` string for a custom rule. */
@@ -117,9 +74,44 @@ function buildDnrRule(id, urlFilter) {
 
 /** Compute the next rule ID from an existing array of custom rules. */
 function nextRuleId(rules) {
-    return rules.length > 0
-        ? Math.max(...rules.map((r) => r.id)) + 1
-        : DYNAMIC_RULE_ID_START;
+    if (rules.length === 0) return DYNAMIC_RULE_ID_START;
+    let max = rules[0].id;
+    for (let i = 1; i < rules.length; i++) {
+        if (rules[i].id > max) max = rules[i].id;
+    }
+    return max + 1;
+}
+
+/** Return how many more DNR dynamic rules we can register. */
+async function getAvailableDnrSlots() {
+    try {
+        const existing = await browser.declarativeNetRequest.getDynamicRules();
+        return Math.max(0, MAX_DYNAMIC_RULES - existing.length);
+    } catch {
+        return MAX_DYNAMIC_RULES;
+    }
+}
+
+/**
+ * Register an array of DNR rule objects in batches.
+ * Returns the number of rules successfully registered.
+ */
+async function batchRegisterDnrRules(dnrRules) {
+    let registered = 0;
+    for (let i = 0; i < dnrRules.length; i += DNR_BATCH_SIZE) {
+        const batch = dnrRules.slice(i, i + DNR_BATCH_SIZE);
+        try {
+            await browser.declarativeNetRequest.updateDynamicRules({
+                addRules: batch,
+                removeRuleIds: [],
+            });
+            registered += batch.length;
+        } catch (e) {
+            console.warn(`[My AdBlock] DNR batch ${i}–${i + batch.length} failed:`, e.message);
+            break; // stop on first failure — remaining rules still work via content script
+        }
+    }
+    return registered;
 }
 
 // ---------------------
@@ -156,7 +148,7 @@ function recordBlocked(url, matchedRule, ruleType) {
 }
 
 // ---------------------
-// Message handler (popup + content script <-> background)
+// Message handler (popup + content script ↔ background)
 // ---------------------
 browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
     switch (message.type) {
@@ -166,9 +158,7 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
 
         case "getBlocklist":
             return getStoredCustomRules().then((custom) => ({
-                hosts: BLOCKED_HOSTS,
-                pathPatterns: BLOCKED_PATH_PATTERNS,
-                customRules: custom,
+                customRules: custom.map((r) => ({ ruleType: r.ruleType, value: r.value })),
             }));
 
         case "getStats":
@@ -184,7 +174,7 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
             return Promise.resolve({ success: true });
 
         case "getCustomRules":
-            return getStoredCustomRules().then((rules) => ({ rules }));
+            return getCustomRulesPaginated(message.page || 1, message.pageSize || 50, message.search || "");
 
         case "addCustomRule":
             return addCustomRule(message.ruleType, message.value);
@@ -198,8 +188,14 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
         case "exportRules":
             return exportRules();
 
-        case "importRules":
-            return importRules(message.rules);
+        case "importRulesBatch":
+            return importRulesBatch(message.rules);
+
+        case "importFinalize":
+            return importFinalize();
+
+        case "clearAllRules":
+            return clearAllRules();
 
         default:
             return Promise.resolve({ error: "Unknown message type" });
@@ -224,17 +220,22 @@ async function addCustomRule(ruleType, value) {
 
     const id = nextRuleId(customRules);
     const urlFilter = buildUrlFilter(ruleType, trimmed);
+    let dnrRegistered = false;
 
-    try {
-        await browser.declarativeNetRequest.updateDynamicRules({
-            addRules: [buildDnrRule(id, urlFilter)],
-            removeRuleIds: [],
-        });
-    } catch (e) {
-        return { error: `Failed to register rule: ${e.message}` };
+    const availableSlots = await getAvailableDnrSlots();
+    if (availableSlots > 0) {
+        try {
+            await browser.declarativeNetRequest.updateDynamicRules({
+                addRules: [buildDnrRule(id, urlFilter)],
+                removeRuleIds: [],
+            });
+            dnrRegistered = true;
+        } catch (e) {
+            console.warn("[My AdBlock] DNR registration failed, rule will work via content script:", e.message);
+        }
     }
 
-    const newEntry = { id, ruleType, value: trimmed, urlFilter };
+    const newEntry = { id, ruleType, value: trimmed, urlFilter, dnrRegistered };
     customRules.push(newEntry);
     await saveCustomRules(customRules);
 
@@ -242,65 +243,131 @@ async function addCustomRule(ruleType, value) {
 }
 
 async function removeCustomRule(ruleId) {
+    const numericId = Number(ruleId);
     const customRules = await getStoredCustomRules();
-    const idx = customRules.findIndex((r) => r.id === ruleId);
+    const idx = customRules.findIndex((r) => Number(r.id) === numericId);
 
     if (idx === -1) {
         return { error: "Rule not found" };
     }
 
-    try {
-        await browser.declarativeNetRequest.updateDynamicRules({
-            addRules: [],
-            removeRuleIds: [ruleId],
-        });
-    } catch (e) {
-        return { error: `Failed to remove rule: ${e.message}` };
+    const removed = customRules[idx];
+
+    // Only remove from DNR if it was registered there
+    if (removed.dnrRegistered) {
+        try {
+            await browser.declarativeNetRequest.updateDynamicRules({
+                addRules: [],
+                removeRuleIds: [numericId],
+            });
+        } catch (e) {
+            return { error: `Failed to remove rule: ${e.message}` };
+        }
     }
 
     customRules.splice(idx, 1);
-    await saveCustomRules(customRules);
+
+    // Backfill: promote a storage-only rule into the freed DNR slot
+    if (removed.dnrRegistered) {
+        const backfill = customRules.find((r) => !r.dnrRegistered);
+        if (backfill) {
+            try {
+                await browser.declarativeNetRequest.updateDynamicRules({
+                    addRules: [buildDnrRule(backfill.id, backfill.urlFilter)],
+                    removeRuleIds: [],
+                });
+                backfill.dnrRegistered = true;
+            } catch {
+                // Not critical — rule still works via content script
+            }
+        }
+    }
+
+    try {
+        await saveCustomRules(customRules);
+    } catch (e) {
+        return { error: `Rule removed from memory but failed to save: ${e.message}` };
+    }
 
     return { success: true };
 }
 
 async function getRuleCounts() {
     const customRules = await getStoredCustomRules();
-    const customCount = customRules.length;
+    return { total: customRules.length };
+}
 
-    let builtinCount = 43;
-    try {
-        const rulesets = await browser.declarativeNetRequest.getEnabledRulesets();
-        if (!rulesets.includes("builtin_rules")) {
-            builtinCount = 0;
-        }
-    } catch {
-        // fallback
+async function getCustomRulesPaginated(page, pageSize, search) {
+    let allRules = await getStoredCustomRules();
+
+    // Filter by search query if provided
+    if (search) {
+        const q = search.toLowerCase();
+        allRules = allRules.filter((r) => r.value.includes(q));
     }
 
-    return { builtinCount, customCount, total: builtinCount + customCount };
+    // Sort by id descending (newest/last-created first)
+    allRules.sort((a, b) => b.id - a.id);
+
+    const totalCount = allRules.length;
+    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+    const safePage = Math.max(1, Math.min(page, totalPages));
+
+    const start = (safePage - 1) * pageSize;
+    const rules = allRules.slice(start, start + pageSize);
+
+    return { rules, page: safePage, pageSize, totalCount, totalPages };
 }
 
 // ---------------------
-// Import / Export
+// EasyList Export Helper
+// ---------------------
+
+/**
+ * Convert an internal custom rule back to EasyList filter syntax.
+ */
+function ruleToEasyListLine(rule) {
+    if (rule.ruleType === "host") {
+        return `||${rule.value}^`;
+    }
+    return rule.value;
+}
+
+// ---------------------
+// Import / Export  (EasyList text format)
 // ---------------------
 
 async function exportRules() {
     const customRules = await getStoredCustomRules();
 
+    const header = [
+        "[Adblock Plus 2.0]",
+        `! Title: My AdBlock — Custom Rules`,
+        `! Exported: ${new Date().toISOString()}`,
+        `! Total rules: ${customRules.length}`,
+        "",
+    ];
+
+    const filterLines = customRules.map((r) => ruleToEasyListLine(r));
+    const text = header.concat(filterLines).join("\n");
+
     return {
         success: true,
         data: {
-            version: 1,
-            exportedAt: new Date().toISOString(),
-            rules: customRules.map((r) => ({ ruleType: r.ruleType, value: r.value })),
+            text,
+            count: customRules.length,
         },
     };
 }
 
-async function importRules(incomingRules) {
+/**
+ * Import a small batch of pre-parsed rules.
+ * Called repeatedly by popup.js with chunks of ~500 rules.
+ * Saves to storage only — DNR registration happens in importFinalize().
+ */
+async function importRulesBatch(incomingRules) {
     if (!Array.isArray(incomingRules) || incomingRules.length === 0) {
-        return { error: "No valid rules found in file." };
+        return { imported: 0, skipped: 0 };
     }
 
     const existingRules = await getStoredCustomRules();
@@ -308,14 +375,13 @@ async function importRules(incomingRules) {
     let id = nextRuleId(existingRules);
 
     const newEntries = [];
-    const dnrRulesToAdd = [];
     let skipped = 0;
 
-    for (const incoming of incomingRules) {
-        const { ruleType } = incoming;
-        const value = (incoming.value || "").trim().toLowerCase();
+    for (const rule of incomingRules) {
+        const ruleType = rule.ruleType;
+        const value = (rule.value || "").trim().toLowerCase();
 
-        if (!value || !["host", "pattern"].includes(ruleType)) {
+        if (!value || (ruleType !== "host" && ruleType !== "pattern")) {
             skipped++;
             continue;
         }
@@ -325,33 +391,90 @@ async function importRules(incomingRules) {
         }
 
         const urlFilter = buildUrlFilter(ruleType, value);
-        newEntries.push({ id, ruleType, value, urlFilter });
-        dnrRulesToAdd.push(buildDnrRule(id, urlFilter));
-
+        newEntries.push({ id, ruleType, value, urlFilter, dnrRegistered: false });
         existingValues.add(value);
         id++;
     }
 
-    if (newEntries.length === 0) {
-        return { error: `No new rules to import (${skipped} skipped as duplicates or invalid).` };
+    if (newEntries.length > 0) {
+        await saveCustomRules([...existingRules, ...newEntries]);
     }
 
+    return { imported: newEntries.length, skipped };
+}
+
+/**
+ * After all batches are imported to storage, register DNR rules.
+ * Called once by popup.js after all importRulesBatch calls complete.
+ */
+async function importFinalize() {
+    const customRules = await getStoredCustomRules();
+
+    // Clear existing DNR rules
     try {
-        await browser.declarativeNetRequest.updateDynamicRules({
-            addRules: dnrRulesToAdd,
-            removeRuleIds: [],
-        });
+        const existing = await browser.declarativeNetRequest.getDynamicRules();
+        const ids = existing.map((r) => r.id);
+        if (ids.length > 0) {
+            for (let i = 0; i < ids.length; i += DNR_BATCH_SIZE) {
+                await browser.declarativeNetRequest.updateDynamicRules({
+                    addRules: [],
+                    removeRuleIds: ids.slice(i, i + DNR_BATCH_SIZE),
+                });
+            }
+        }
     } catch (e) {
-        return { error: `Failed to register imported rules: ${e.message}` };
+        console.warn("[My AdBlock] Failed to clear DNR rules:", e.message);
     }
 
-    await saveCustomRules([...existingRules, ...newEntries]);
+    // Register up to the limit
+    const toRegister = customRules.slice(0, MAX_DYNAMIC_RULES);
+    const dnrRules = toRegister.map((r) => buildDnrRule(r.id, r.urlFilter));
+    const registered = await batchRegisterDnrRules(dnrRules);
 
-    return { success: true, imported: newEntries.length, skipped };
+    // Update flags
+    let changed = false;
+    const registeredIds = new Set(toRegister.slice(0, registered).map((r) => r.id));
+    for (const rule of customRules) {
+        const shouldBe = registeredIds.has(rule.id);
+        if (rule.dnrRegistered !== shouldBe) {
+            rule.dnrRegistered = shouldBe;
+            changed = true;
+        }
+    }
+    if (changed) {
+        await saveCustomRules(customRules);
+    }
+
+    return { success: true, total: customRules.length, dnrRegistered: registered };
+}
+
+/**
+ * Remove all custom rules from storage and DNR.
+ * Clears storage first (fast), then cleans up DNR rules.
+ */
+async function clearAllRules() {
+    // Clear storage first — this is instant and ensures rules are gone
+    await saveCustomRules([]);
+
+    // Then clean up DNR rules (may be slow with many rules)
+    try {
+        const existing = await browser.declarativeNetRequest.getDynamicRules();
+        const ids = existing.map((r) => r.id);
+        for (let i = 0; i < ids.length; i += DNR_BATCH_SIZE) {
+            await browser.declarativeNetRequest.updateDynamicRules({
+                addRules: [],
+                removeRuleIds: ids.slice(i, i + DNR_BATCH_SIZE),
+            });
+        }
+    } catch (e) {
+        console.warn("[My AdBlock] Failed to clear DNR rules:", e.message);
+    }
+
+    return { success: true };
 }
 
 // ---------------------
-// Context menu -- "Block this hostname"
+// Context menu — "Block this hostname"
 // Safari may expose contextMenus as browser.menus in some versions.
 // ---------------------
 
@@ -361,15 +484,15 @@ const CONTEXT_MENU_ID = "my-adblock-block-host";
 menus.create({
     id: CONTEXT_MENU_ID,
     title: "My AdBlock — Block this hostname",
-    contexts: ["all"],
+    contexts: ["page", "link", "image", "video", "audio", "selection", "editable", "frame"],
 });
 
 /**
  * Extract the most relevant hostname from the context menu click info.
  * Priority: element src URL → link URL → frame URL → page URL.
  */
-function extractHostname(info) {
-    const candidates = [info.srcUrl, info.linkUrl, info.frameUrl, info.pageUrl];
+function extractHostname(info, tab) {
+    const candidates = [info.srcUrl, info.linkUrl, info.frameUrl, info.pageUrl, tab?.url];
     for (const url of candidates) {
         if (url) {
             try {
@@ -385,7 +508,7 @@ function extractHostname(info) {
 menus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId !== CONTEXT_MENU_ID) return;
 
-    const hostname = extractHostname(info);
+    const hostname = extractHostname(info, tab);
     if (!hostname) return;
 
     // Resolve target tab — prefer the tab from the callback, fall back to querying the active tab
@@ -416,22 +539,43 @@ menus.onClicked.addListener(async (info, tab) => {
 // ---------------------
 async function restoreDynamicRules() {
     const customRules = await getStoredCustomRules();
-    customRulesCache = customRules;
 
     if (customRules.length === 0) return;
 
-    const dnrRules = customRules.map((r) => buildDnrRule(r.id, r.urlFilter));
-
-    const existingDynamic = await browser.declarativeNetRequest.getDynamicRules();
-    const existingIds = existingDynamic.map((r) => r.id);
-
+    // Clear all existing dynamic rules first (in batches)
     try {
-        await browser.declarativeNetRequest.updateDynamicRules({
-            addRules: dnrRules,
-            removeRuleIds: existingIds,
-        });
+        const existingDynamic = await browser.declarativeNetRequest.getDynamicRules();
+        const existingIds = existingDynamic.map((r) => r.id);
+        if (existingIds.length > 0) {
+            for (let i = 0; i < existingIds.length; i += DNR_BATCH_SIZE) {
+                const batch = existingIds.slice(i, i + DNR_BATCH_SIZE);
+                await browser.declarativeNetRequest.updateDynamicRules({
+                    addRules: [],
+                    removeRuleIds: batch,
+                });
+            }
+        }
     } catch (e) {
-        console.error("[My AdBlock] Failed to restore dynamic rules:", e);
+        console.error("[My AdBlock] Failed to clear existing dynamic rules:", e);
+    }
+
+    // Only register up to the limit
+    const toRegister = customRules.slice(0, MAX_DYNAMIC_RULES);
+    const dnrRules = toRegister.map((r) => buildDnrRule(r.id, r.urlFilter));
+    const registered = await batchRegisterDnrRules(dnrRules);
+
+    // Update dnrRegistered flags
+    let changed = false;
+    const registeredIds = new Set(toRegister.slice(0, registered).map((r) => r.id));
+    for (const rule of customRules) {
+        const shouldBe = registeredIds.has(rule.id);
+        if (rule.dnrRegistered !== shouldBe) {
+            rule.dnrRegistered = shouldBe;
+            changed = true;
+        }
+    }
+    if (changed) {
+        await saveCustomRules(customRules);
     }
 }
 

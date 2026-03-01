@@ -23,11 +23,12 @@
     /** Debounce delay (ms) for MutationObserver callbacks. */
     const MUTATION_DEBOUNCE_MS = 500;
 
+    /** Duration (ms) for in-page toast notifications. */
+    const TOAST_DURATION_MS = 3000;
+
     // ---------------------
     // Blocklist — fetched from background on init
     // ---------------------
-    let blockedHosts = [];
-    let blockedPathPatterns = [];
     let customRules = [];
     let blocklistReady = false;
 
@@ -40,8 +41,6 @@
     async function fetchBlocklist() {
         try {
             const resp = await browser.runtime.sendMessage({ type: "getBlocklist" });
-            blockedHosts = resp.hosts || [];
-            blockedPathPatterns = resp.pathPatterns || [];
             customRules = resp.customRules || [];
             blocklistReady = true;
 
@@ -59,27 +58,14 @@
         try {
             const urlObj = new URL(url);
             const hostname = urlObj.hostname.toLowerCase();
-            const pathname = urlObj.pathname.toLowerCase();
-
-            for (const host of blockedHosts) {
-                if (hostname === host || hostname.endsWith(`.${host}`)) {
-                    return { matched: true, rule: host, type: "host" };
-                }
-            }
-
-            for (const pattern of blockedPathPatterns) {
-                if (pathname.includes(pattern)) {
-                    return { matched: true, rule: pattern, type: "pattern" };
-                }
-            }
 
             for (const rule of customRules) {
                 if (rule.ruleType === "host") {
                     if (hostname === rule.value || hostname.endsWith(`.${rule.value}`)) {
-                        return { matched: true, rule: rule.value, type: "custom-host" };
+                        return { matched: true, rule: rule.value, type: "host" };
                     }
                 } else if (url.toLowerCase().includes(rule.value)) {
-                    return { matched: true, rule: rule.value, type: "custom-pattern" };
+                    return { matched: true, rule: rule.value, type: "pattern" };
                 }
             }
         } catch {
@@ -267,8 +253,6 @@
     // ===========================================================
 
     /** Show a non-blocking toast notification in the corner of the page. */
-    const TOAST_DURATION_MS = 3000;
-
     function showPageToast(text, isError = false) {
         const toast = document.createElement("div");
         toast.textContent = text;
@@ -315,7 +299,7 @@
     /**
      * Extract a hostname from a URL string, or return null.
      */
-    function hostnameFromUrl(url) {
+    function parseHostname(url) {
         if (!url) return null;
         try {
             return new URL(url).hostname || null;
@@ -340,14 +324,14 @@
 
         // 1. Element itself is an iframe
         if (el.tagName === "IFRAME") {
-            return hostnameFromUrl(el.src);
+            return parseHostname(el.src);
         }
 
         // 2. Iframes nested inside the element
         const nested = el.querySelectorAll?.("iframe[src]");
         if (nested && nested.length > 0) {
             for (const iframe of nested) {
-                const host = hostnameFromUrl(iframe.src);
+                const host = parseHostname(iframe.src);
                 if (host) return host;
             }
         }
@@ -358,7 +342,7 @@
             const siblings = parent.querySelectorAll?.("iframe[src]");
             if (siblings && siblings.length > 0) {
                 for (const iframe of siblings) {
-                    const host = hostnameFromUrl(iframe.src);
+                    const host = parseHostname(iframe.src);
                     if (host) return host;
                 }
             }
