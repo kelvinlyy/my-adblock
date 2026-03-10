@@ -52,7 +52,6 @@
         "declarativeNetRequest",
         "nativeMessaging",
         "storage",
-        "activeTab",
         "tabs",
         "webNavigation"
     ],

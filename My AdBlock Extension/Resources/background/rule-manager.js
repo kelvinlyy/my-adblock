@@ -205,15 +205,13 @@ async function importRulesBatch(incomingRules) {
 }
 
 // ---------------------
-// Finalize import (register DNR rules)
+// Sync all stored rules with DNR (shared by importFinalize & restoreDynamicRules)
 // ---------------------
 
-/**
- * After all batches are imported to storage, register DNR rules.
- * Called once after all importRulesBatch calls complete.
- */
-async function importFinalize() {
+async function syncAllDnrRules() {
     const customRules = await getStoredCustomRules();
+
+    if (customRules.length === 0) return { total: 0, dnrRegistered: 0 };
 
     await clearAllDnrRules();
 
@@ -234,7 +232,20 @@ async function importFinalize() {
         await saveCustomRules(customRules);
     }
 
-    return { success: true, total: customRules.length, dnrRegistered: registered };
+    return { total: customRules.length, dnrRegistered: registered };
+}
+
+// ---------------------
+// Finalize import (register DNR rules)
+// ---------------------
+
+/**
+ * After all batches are imported to storage, register DNR rules.
+ * Called once after all importRulesBatch calls complete.
+ */
+async function importFinalize() {
+    const result = await syncAllDnrRules();
+    return { success: true, ...result };
 }
 
 // ---------------------

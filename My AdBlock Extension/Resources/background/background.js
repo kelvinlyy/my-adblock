@@ -21,10 +21,7 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
             }));
 
         case "getStats":
-            return (async () => {
-                const stats = getSessionStats(message.tabId);
-                return stats;
-            })();
+            return Promise.resolve(getSessionStats(message.tabId));
 
         case "clearSession":
             clearSession();
@@ -77,29 +74,7 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
 // Restore dynamic rules on startup
 // ---------------------
 async function restoreDynamicRules() {
-    const customRules = await getStoredCustomRules();
-
-    if (customRules.length === 0) return;
-
-    await clearAllDnrRules();
-
-    const toRegister = customRules.slice(0, MAX_DYNAMIC_RULES);
-    const dnrRules = toRegister.map((r) => buildDnrRule(r.id, r.urlFilter));
-    const registered = await batchRegisterDnrRules(dnrRules);
-
-    // Update dnrRegistered flags
-    let changed = false;
-    const registeredIds = new Set(toRegister.slice(0, registered).map((r) => r.id));
-    for (const rule of customRules) {
-        const shouldBe = registeredIds.has(rule.id);
-        if (rule.dnrRegistered !== shouldBe) {
-            rule.dnrRegistered = shouldBe;
-            changed = true;
-        }
-    }
-    if (changed) {
-        await saveCustomRules(customRules);
-    }
+    await syncAllDnrRules();
 }
 
 restoreDynamicRules();

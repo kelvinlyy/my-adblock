@@ -24,15 +24,25 @@ const tabSessionCounts = new Map(); // tabId → count
 // ---------------------
 // Dedup — avoid double-counting the same URL on the same page
 // ---------------------
-const recentlyLogged = new Set();
+const recentlyLogged = new Map(); // url → timestamp
 const DEDUP_TTL_MS = 2000;
+const DEDUP_CLEANUP_INTERVAL_MS = 10000;
 
 function dedup(url) {
-    if (recentlyLogged.has(url)) return false;
-    recentlyLogged.add(url);
-    setTimeout(() => recentlyLogged.delete(url), DEDUP_TTL_MS);
+    const now = Date.now();
+    const prev = recentlyLogged.get(url);
+    if (prev && now - prev < DEDUP_TTL_MS) return false;
+    recentlyLogged.set(url, now);
     return true;
 }
+
+// Periodic cleanup instead of per-entry setTimeout
+setInterval(() => {
+    const cutoff = Date.now() - DEDUP_TTL_MS;
+    for (const [url, ts] of recentlyLogged) {
+        if (ts < cutoff) recentlyLogged.delete(url);
+    }
+}, DEDUP_CLEANUP_INTERVAL_MS);
 
 // ---------------------
 // Record a blocked request (called when content.js reports one)

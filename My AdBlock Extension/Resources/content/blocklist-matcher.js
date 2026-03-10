@@ -3,10 +3,6 @@
 // URL matching against custom blocklist rules.
 // ============================================================
 
-/** @type {string[]} */
-let blockedHosts = [];
-/** @type {string[]} */
-let blockedPathPatterns = [];
 /** @type {{ ruleType: string, value: string }[]} */
 let customRules = [];
 let blocklistReady = false;
@@ -20,8 +16,6 @@ const reportedUrls = new Set();
 async function fetchBlocklist() {
     try {
         const resp = await browser.runtime.sendMessage({ type: "getBlocklist" });
-        blockedHosts = resp.hosts || [];
-        blockedPathPatterns = resp.pathPatterns || [];
         customRules = resp.customRules || [];
         blocklistReady = true;
 
@@ -39,27 +33,14 @@ function matchesBlocklist(url) {
     try {
         const urlObj = new URL(url);
         const hostname = urlObj.hostname.toLowerCase();
-        const pathname = urlObj.pathname.toLowerCase();
-
-        for (const host of blockedHosts) {
-            if (hostname === host || hostname.endsWith(`.${host}`)) {
-                return { matched: true, rule: host, type: "host" };
-            }
-        }
-
-        for (const pattern of blockedPathPatterns) {
-            if (pathname.includes(pattern)) {
-                return { matched: true, rule: pattern, type: "pattern" };
-            }
-        }
 
         for (const rule of customRules) {
             if (rule.ruleType === "host") {
                 if (hostname === rule.value || hostname.endsWith(`.${rule.value}`)) {
-                    return { matched: true, rule: rule.value, type: "custom-host" };
+                    return { matched: true, rule: rule.value, type: "host" };
                 }
             } else if (url.toLowerCase().includes(rule.value)) {
-                return { matched: true, rule: rule.value, type: "custom-pattern" };
+                return { matched: true, rule: rule.value, type: "pattern" };
             }
         }
     } catch {

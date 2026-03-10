@@ -1,3 +1,4 @@
+
 // ============================================================
 // My AdBlock — storage.js
 // Storage helpers for reading/writing custom rules.
@@ -35,9 +36,27 @@ async function getAllTimeBlockedCount() {
     return data[STORAGE_KEY_ALL_TIME] || 0;
 }
 
-/** Increment the all-time blocked count by 1. */
+/** Increment the all-time blocked count by 1 (batched to avoid race conditions). */
+let _pendingIncrements = 0;
+let _flushTimer = null;
+
 function incrementAllTimeBlockedCount() {
-    browser.storage.local.get({ [STORAGE_KEY_ALL_TIME]: 0 }).then((data) => {
-        browser.storage.local.set({ [STORAGE_KEY_ALL_TIME]: (data[STORAGE_KEY_ALL_TIME] || 0) + 1 });
-    });
+    _pendingIncrements++;
+    if (!_flushTimer) {
+        _flushTimer = setTimeout(_flushBlockedCount, 1000);
+    }
+}
+
+async function _flushBlockedCount() {
+    _flushTimer = null;
+    const delta = _pendingIncrements;
+    _pendingIncrements = 0;
+    if (delta <= 0) return;
+
+    try {
+        const data = await browser.storage.local.get({ [STORAGE_KEY_ALL_TIME]: 0 });
+        await browser.storage.local.set({ [STORAGE_KEY_ALL_TIME]: (data[STORAGE_KEY_ALL_TIME] || 0) + delta });
+    } catch (e) {
+        console.warn("[My AdBlock] Failed to flush blocked count:", e.message);
+    }
 }
