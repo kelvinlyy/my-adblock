@@ -1,817 +1,821 @@
 // !$*UTF8*$!
 {
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 77;
-	objects = {
+  archiveVersion = 1;
+  classes = {
+  };
+  objectVersion = 77;
+  objects = {
 
 /* Begin PBXBuildFile section */
-		94CA031E2F4CA446005B99CD /* My AdBlock Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+    94CA031E2F4CA446005B99CD /* My AdBlock Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		94CA03082F4CA446005B99CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94CA02E52F4CA445005B99CD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94CA02EC2F4CA445005B99CD;
-			remoteInfo = "My AdBlock";
-		};
-		94CA03122F4CA446005B99CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94CA02E52F4CA445005B99CD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94CA02EC2F4CA445005B99CD;
-			remoteInfo = "My AdBlock";
-		};
-		94CA031F2F4CA446005B99CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94CA02E52F4CA445005B99CD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94CA031C2F4CA446005B99CD;
-			remoteInfo = "My AdBlock Extension";
-		};
+    94CA03082F4CA446005B99CD /* PBXContainerItemProxy */ = {
+      isa = PBXContainerItemProxy;
+      containerPortal = 94CA02E52F4CA445005B99CD /* Project object */;
+      proxyType = 1;
+      remoteGlobalIDString = 94CA02EC2F4CA445005B99CD;
+      remoteInfo = "My AdBlock";
+    };
+    94CA03122F4CA446005B99CD /* PBXContainerItemProxy */ = {
+      isa = PBXContainerItemProxy;
+      containerPortal = 94CA02E52F4CA445005B99CD /* Project object */;
+      proxyType = 1;
+      remoteGlobalIDString = 94CA02EC2F4CA445005B99CD;
+      remoteInfo = "My AdBlock";
+    };
+    94CA031F2F4CA446005B99CD /* PBXContainerItemProxy */ = {
+      isa = PBXContainerItemProxy;
+      containerPortal = 94CA02E52F4CA445005B99CD /* Project object */;
+      proxyType = 1;
+      remoteGlobalIDString = 94CA031C2F4CA446005B99CD;
+      remoteInfo = "My AdBlock Extension";
+    };
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		94CA033C2F4CA446005B99CD /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				94CA031E2F4CA446005B99CD /* My AdBlock Extension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+    94CA033C2F4CA446005B99CD /* Embed Foundation Extensions */ = {
+      isa = PBXCopyFilesBuildPhase;
+      buildActionMask = 2147483647;
+      dstPath = "";
+      dstSubfolderSpec = 13;
+      files = (
+        94CA031E2F4CA446005B99CD /* My AdBlock Extension.appex in Embed Foundation Extensions */,
+      );
+      name = "Embed Foundation Extensions";
+      runOnlyForDeploymentPostprocessing = 0;
+    };
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		94CA02ED2F4CA445005B99CD /* My AdBlock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My AdBlock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		94CA03072F4CA446005B99CD /* My AdBlockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AdBlockTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		94CA03112F4CA446005B99CD /* My AdBlockUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AdBlockUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "My AdBlock Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+    94CA02ED2F4CA445005B99CD /* My AdBlock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My AdBlock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+    94CA03072F4CA446005B99CD /* My AdBlockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AdBlockTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+    94CA03112F4CA446005B99CD /* My AdBlockUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AdBlockUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+    94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "My AdBlock Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		94CA03362F4CA446005B99CD /* Exceptions for "My AdBlock Extension" folder in "My AdBlock Extension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 94CA031C2F4CA446005B99CD /* My AdBlock Extension */;
-		};
+    94CA03362F4CA446005B99CD /* Exceptions for "My AdBlock Extension" folder in "My AdBlock Extension" target */ = {
+      isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+      membershipExceptions = (
+        Info.plist,
+      );
+      target = 94CA031C2F4CA446005B99CD /* My AdBlock Extension */;
+    };
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		94CA02EF2F4CA445005B99CD /* My AdBlock */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "My AdBlock";
-			sourceTree = "<group>";
-		};
-		94CA030A2F4CA446005B99CD /* My AdBlockTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "My AdBlockTests";
-			sourceTree = "<group>";
-		};
-		94CA03142F4CA446005B99CD /* My AdBlockUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "My AdBlockUITests";
-			sourceTree = "<group>";
-		};
-		94CA03212F4CA446005B99CD /* My AdBlock Extension */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				94CA03362F4CA446005B99CD /* Exceptions for "My AdBlock Extension" folder in "My AdBlock Extension" target */,
-			);
-			explicitFolders = (
-				Resources/_locales,
-				Resources/background,
-				Resources/content,
-				Resources/images,
-				Resources/popup,
-				Resources/shared,
-			);
-			path = "My AdBlock Extension";
-			sourceTree = "<group>";
-		};
+    94CA02EF2F4CA445005B99CD /* My AdBlock */ = {
+      isa = PBXFileSystemSynchronizedRootGroup;
+      path = "My AdBlock";
+      sourceTree = "<group>";
+    };
+    94CA030A2F4CA446005B99CD /* My AdBlockTests */ = {
+      isa = PBXFileSystemSynchronizedRootGroup;
+      path = "My AdBlockTests";
+      sourceTree = "<group>";
+    };
+    94CA03142F4CA446005B99CD /* My AdBlockUITests */ = {
+      isa = PBXFileSystemSynchronizedRootGroup;
+      path = "My AdBlockUITests";
+      sourceTree = "<group>";
+    };
+    94CA03212F4CA446005B99CD /* My AdBlock Extension */ = {
+      isa = PBXFileSystemSynchronizedRootGroup;
+      exceptions = (
+        94CA03362F4CA446005B99CD /* Exceptions for "My AdBlock Extension" folder in "My AdBlock Extension" target */,
+      );
+      explicitFolders = (
+        Resources/_locales,
+        Resources/background,
+        Resources/content,
+        Resources/images,
+        Resources/popup,
+        Resources/shared,
+      );
+      path = "My AdBlock Extension";
+      sourceTree = "<group>";
+    };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		94CA02EA2F4CA445005B99CD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA03042F4CA446005B99CD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA030E2F4CA446005B99CD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA031A2F4CA446005B99CD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+    94CA02EA2F4CA445005B99CD /* Frameworks */ = {
+      isa = PBXFrameworksBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA03042F4CA446005B99CD /* Frameworks */ = {
+      isa = PBXFrameworksBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA030E2F4CA446005B99CD /* Frameworks */ = {
+      isa = PBXFrameworksBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA031A2F4CA446005B99CD /* Frameworks */ = {
+      isa = PBXFrameworksBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		94CA02E42F4CA445005B99CD = {
-			isa = PBXGroup;
-			children = (
-				94CA02EF2F4CA445005B99CD /* My AdBlock */,
-				94CA03212F4CA446005B99CD /* My AdBlock Extension */,
-				94CA030A2F4CA446005B99CD /* My AdBlockTests */,
-				94CA03142F4CA446005B99CD /* My AdBlockUITests */,
-				94CA02EE2F4CA445005B99CD /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		94CA02EE2F4CA445005B99CD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				94CA02ED2F4CA445005B99CD /* My AdBlock.app */,
-				94CA03072F4CA446005B99CD /* My AdBlockTests.xctest */,
-				94CA03112F4CA446005B99CD /* My AdBlockUITests.xctest */,
-				94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
+    94CA02E42F4CA445005B99CD = {
+      isa = PBXGroup;
+      children = (
+        94CA02EF2F4CA445005B99CD /* My AdBlock */,
+        94CA03212F4CA446005B99CD /* My AdBlock Extension */,
+        94CA030A2F4CA446005B99CD /* My AdBlockTests */,
+        94CA03142F4CA446005B99CD /* My AdBlockUITests */,
+        94CA02EE2F4CA445005B99CD /* Products */,
+      );
+      sourceTree = "<group>";
+    };
+    94CA02EE2F4CA445005B99CD /* Products */ = {
+      isa = PBXGroup;
+      children = (
+        94CA02ED2F4CA445005B99CD /* My AdBlock.app */,
+        94CA03072F4CA446005B99CD /* My AdBlockTests.xctest */,
+        94CA03112F4CA446005B99CD /* My AdBlockUITests.xctest */,
+        94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */,
+      );
+      name = Products;
+      sourceTree = "<group>";
+    };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		94CA02EC2F4CA445005B99CD /* My AdBlock */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94CA033D2F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock" */;
-			buildPhases = (
-				94CA02E92F4CA445005B99CD /* Sources */,
-				94CA02EA2F4CA445005B99CD /* Frameworks */,
-				94CA02EB2F4CA445005B99CD /* Resources */,
-				94CA033C2F4CA446005B99CD /* Embed Foundation Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				94CA03202F4CA446005B99CD /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				94CA02EF2F4CA445005B99CD /* My AdBlock */,
-			);
-			name = "My AdBlock";
-			packageProductDependencies = (
-			);
-			productName = "My AdBlock";
-			productReference = 94CA02ED2F4CA445005B99CD /* My AdBlock.app */;
-			productType = "com.apple.product-type.application";
-		};
-		94CA03062F4CA446005B99CD /* My AdBlockTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94CA03402F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockTests" */;
-			buildPhases = (
-				94CA03032F4CA446005B99CD /* Sources */,
-				94CA03042F4CA446005B99CD /* Frameworks */,
-				94CA03052F4CA446005B99CD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				94CA03092F4CA446005B99CD /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				94CA030A2F4CA446005B99CD /* My AdBlockTests */,
-			);
-			name = "My AdBlockTests";
-			packageProductDependencies = (
-			);
-			productName = "My AdBlockTests";
-			productReference = 94CA03072F4CA446005B99CD /* My AdBlockTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		94CA03102F4CA446005B99CD /* My AdBlockUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94CA03432F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockUITests" */;
-			buildPhases = (
-				94CA030D2F4CA446005B99CD /* Sources */,
-				94CA030E2F4CA446005B99CD /* Frameworks */,
-				94CA030F2F4CA446005B99CD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				94CA03132F4CA446005B99CD /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				94CA03142F4CA446005B99CD /* My AdBlockUITests */,
-			);
-			name = "My AdBlockUITests";
-			packageProductDependencies = (
-			);
-			productName = "My AdBlockUITests";
-			productReference = 94CA03112F4CA446005B99CD /* My AdBlockUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		94CA031C2F4CA446005B99CD /* My AdBlock Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94CA03372F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock Extension" */;
-			buildPhases = (
-				94CA03192F4CA446005B99CD /* Sources */,
-				94CA031A2F4CA446005B99CD /* Frameworks */,
-				94CA031B2F4CA446005B99CD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				94CA03212F4CA446005B99CD /* My AdBlock Extension */,
-			);
-			name = "My AdBlock Extension";
-			packageProductDependencies = (
-			);
-			productName = "My AdBlock Extension";
-			productReference = 94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
+    94CA02EC2F4CA445005B99CD /* My AdBlock */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 94CA033D2F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock" */;
+      buildPhases = (
+        94CA02E92F4CA445005B99CD /* Sources */,
+        94CA02EA2F4CA445005B99CD /* Frameworks */,
+        94CA02EB2F4CA445005B99CD /* Resources */,
+        94CA033C2F4CA446005B99CD /* Embed Foundation Extensions */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+        94CA03202F4CA446005B99CD /* PBXTargetDependency */,
+      );
+      fileSystemSynchronizedGroups = (
+        94CA02EF2F4CA445005B99CD /* My AdBlock */,
+      );
+      name = "My AdBlock";
+      packageProductDependencies = (
+      );
+      productName = "My AdBlock";
+      productReference = 94CA02ED2F4CA445005B99CD /* My AdBlock.app */;
+      productType = "com.apple.product-type.application";
+    };
+    94CA03062F4CA446005B99CD /* My AdBlockTests */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 94CA03402F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockTests" */;
+      buildPhases = (
+        94CA03032F4CA446005B99CD /* Sources */,
+        94CA03042F4CA446005B99CD /* Frameworks */,
+        94CA03052F4CA446005B99CD /* Resources */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+        94CA03092F4CA446005B99CD /* PBXTargetDependency */,
+      );
+      fileSystemSynchronizedGroups = (
+        94CA030A2F4CA446005B99CD /* My AdBlockTests */,
+      );
+      name = "My AdBlockTests";
+      packageProductDependencies = (
+      );
+      productName = "My AdBlockTests";
+      productReference = 94CA03072F4CA446005B99CD /* My AdBlockTests.xctest */;
+      productType = "com.apple.product-type.bundle.unit-test";
+    };
+    94CA03102F4CA446005B99CD /* My AdBlockUITests */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 94CA03432F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockUITests" */;
+      buildPhases = (
+        94CA030D2F4CA446005B99CD /* Sources */,
+        94CA030E2F4CA446005B99CD /* Frameworks */,
+        94CA030F2F4CA446005B99CD /* Resources */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+        94CA03132F4CA446005B99CD /* PBXTargetDependency */,
+      );
+      fileSystemSynchronizedGroups = (
+        94CA03142F4CA446005B99CD /* My AdBlockUITests */,
+      );
+      name = "My AdBlockUITests";
+      packageProductDependencies = (
+      );
+      productName = "My AdBlockUITests";
+      productReference = 94CA03112F4CA446005B99CD /* My AdBlockUITests.xctest */;
+      productType = "com.apple.product-type.bundle.ui-testing";
+    };
+    94CA031C2F4CA446005B99CD /* My AdBlock Extension */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 94CA03372F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock Extension" */;
+      buildPhases = (
+        94CA03192F4CA446005B99CD /* Sources */,
+        94CA031A2F4CA446005B99CD /* Frameworks */,
+        94CA031B2F4CA446005B99CD /* Resources */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+      );
+      fileSystemSynchronizedGroups = (
+        94CA03212F4CA446005B99CD /* My AdBlock Extension */,
+      );
+      name = "My AdBlock Extension";
+      packageProductDependencies = (
+      );
+      productName = "My AdBlock Extension";
+      productReference = 94CA031D2F4CA446005B99CD /* My AdBlock Extension.appex */;
+      productType = "com.apple.product-type.app-extension";
+    };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		94CA02E52F4CA445005B99CD /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2620;
-				TargetAttributes = {
-					94CA02EC2F4CA445005B99CD = {
-						CreatedOnToolsVersion = 26.2;
-					};
-					94CA03062F4CA446005B99CD = {
-						CreatedOnToolsVersion = 26.2;
-						TestTargetID = 94CA02EC2F4CA445005B99CD;
-					};
-					94CA03102F4CA446005B99CD = {
-						CreatedOnToolsVersion = 26.2;
-						TestTargetID = 94CA02EC2F4CA445005B99CD;
-					};
-					94CA031C2F4CA446005B99CD = {
-						CreatedOnToolsVersion = 26.2;
-					};
-				};
-			};
-			buildConfigurationList = 94CA02E82F4CA445005B99CD /* Build configuration list for PBXProject "My AdBlock" */;
-			developmentRegion = en;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
-			);
-			mainGroup = 94CA02E42F4CA445005B99CD;
-			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 94CA02EE2F4CA445005B99CD /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				94CA02EC2F4CA445005B99CD /* My AdBlock */,
-				94CA03062F4CA446005B99CD /* My AdBlockTests */,
-				94CA03102F4CA446005B99CD /* My AdBlockUITests */,
-				94CA031C2F4CA446005B99CD /* My AdBlock Extension */,
-			);
-		};
+    94CA02E52F4CA445005B99CD /* Project object */ = {
+      isa = PBXProject;
+      attributes = {
+        BuildIndependentTargetsInParallel = 1;
+        LastSwiftUpdateCheck = 2620;
+        LastUpgradeCheck = 2620;
+        TargetAttributes = {
+          94CA02EC2F4CA445005B99CD = {
+            CreatedOnToolsVersion = 26.2;
+          };
+          94CA03062F4CA446005B99CD = {
+            CreatedOnToolsVersion = 26.2;
+            TestTargetID = 94CA02EC2F4CA445005B99CD;
+          };
+          94CA03102F4CA446005B99CD = {
+            CreatedOnToolsVersion = 26.2;
+            TestTargetID = 94CA02EC2F4CA445005B99CD;
+          };
+          94CA031C2F4CA446005B99CD = {
+            CreatedOnToolsVersion = 26.2;
+          };
+        };
+      };
+      buildConfigurationList = 94CA02E82F4CA445005B99CD /* Build configuration list for PBXProject "My AdBlock" */;
+      developmentRegion = en;
+      hasScannedForEncodings = 0;
+      knownRegions = (
+        en,
+        Base,
+      );
+      mainGroup = 94CA02E42F4CA445005B99CD;
+      minimizedProjectReferenceProxies = 1;
+      preferredProjectObjectVersion = 77;
+      productRefGroup = 94CA02EE2F4CA445005B99CD /* Products */;
+      projectDirPath = "";
+      projectRoot = "";
+      targets = (
+        94CA02EC2F4CA445005B99CD /* My AdBlock */,
+        94CA03062F4CA446005B99CD /* My AdBlockTests */,
+        94CA03102F4CA446005B99CD /* My AdBlockUITests */,
+        94CA031C2F4CA446005B99CD /* My AdBlock Extension */,
+      );
+    };
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		94CA02EB2F4CA445005B99CD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA03052F4CA446005B99CD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA030F2F4CA446005B99CD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA031B2F4CA446005B99CD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+    94CA02EB2F4CA445005B99CD /* Resources */ = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA03052F4CA446005B99CD /* Resources */ = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA030F2F4CA446005B99CD /* Resources */ = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA031B2F4CA446005B99CD /* Resources */ = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		94CA02E92F4CA445005B99CD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA03032F4CA446005B99CD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA030D2F4CA446005B99CD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94CA03192F4CA446005B99CD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+    94CA02E92F4CA445005B99CD /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA03032F4CA446005B99CD /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA030D2F4CA446005B99CD /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    94CA03192F4CA446005B99CD /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		94CA03092F4CA446005B99CD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94CA02EC2F4CA445005B99CD /* My AdBlock */;
-			targetProxy = 94CA03082F4CA446005B99CD /* PBXContainerItemProxy */;
-		};
-		94CA03132F4CA446005B99CD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94CA02EC2F4CA445005B99CD /* My AdBlock */;
-			targetProxy = 94CA03122F4CA446005B99CD /* PBXContainerItemProxy */;
-		};
-		94CA03202F4CA446005B99CD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94CA031C2F4CA446005B99CD /* My AdBlock Extension */;
-			targetProxy = 94CA031F2F4CA446005B99CD /* PBXContainerItemProxy */;
-		};
+    94CA03092F4CA446005B99CD /* PBXTargetDependency */ = {
+      isa = PBXTargetDependency;
+      target = 94CA02EC2F4CA445005B99CD /* My AdBlock */;
+      targetProxy = 94CA03082F4CA446005B99CD /* PBXContainerItemProxy */;
+    };
+    94CA03132F4CA446005B99CD /* PBXTargetDependency */ = {
+      isa = PBXTargetDependency;
+      target = 94CA02EC2F4CA445005B99CD /* My AdBlock */;
+      targetProxy = 94CA03122F4CA446005B99CD /* PBXContainerItemProxy */;
+    };
+    94CA03202F4CA446005B99CD /* PBXTargetDependency */ = {
+      isa = PBXTargetDependency;
+      target = 94CA031C2F4CA446005B99CD /* My AdBlock Extension */;
+      targetProxy = 94CA031F2F4CA446005B99CD /* PBXContainerItemProxy */;
+    };
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		94CA03382F4CA446005B99CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "My AdBlock Extension/My_AdBlock_Extension.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "My AdBlock Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/../../../../Frameworks",
-					"@executable_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock.Extension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		94CA03392F4CA446005B99CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "My AdBlock Extension/My_AdBlock_Extension.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "My AdBlock Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/../../../../Frameworks",
-					"@executable_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock.Extension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		94CA033A2F4CA446005B99CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		94CA033B2F4CA446005B99CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-			};
-			name = Release;
-		};
-		94CA033E2F4CA446005B99CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				"INFOPLIST_KEY_NSPrincipalClass[sdk=macosx*]" = NSApplication;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-					"-framework",
-					WebKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		94CA033F2F4CA446005B99CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				"INFOPLIST_KEY_NSPrincipalClass[sdk=macosx*]" = NSApplication;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-					"-framework",
-					WebKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		94CA03412F4CA446005B99CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My AdBlock.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/My AdBlock";
-			};
-			name = Debug;
-		};
-		94CA03422F4CA446005B99CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My AdBlock.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/My AdBlock";
-			};
-			name = Release;
-		};
-		94CA03442F4CA446005B99CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "My AdBlock";
-			};
-			name = Debug;
-		};
-		94CA03452F4CA446005B99CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FM5TRY23R3;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "My AdBlock";
-			};
-			name = Release;
-		};
+    94CA03382F4CA446005B99CD /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        CODE_SIGN_ENTITLEMENTS = "My AdBlock Extension/My_AdBlock_Extension.entitlements";
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        ENABLE_APP_SANDBOX = YES;
+        ENABLE_HARDENED_RUNTIME = YES;
+        ENABLE_USER_SELECTED_FILES = readonly;
+        GENERATE_INFOPLIST_FILE = YES;
+        INFOPLIST_FILE = "My AdBlock Extension/Info.plist";
+        INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock Extension";
+        INFOPLIST_KEY_NSHumanReadableCopyright = "";
+        IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+        LD_RUNPATH_SEARCH_PATHS = (
+          "$(inherited)",
+          "@executable_path/../Frameworks",
+          "@executable_path/../../../../Frameworks",
+          "@executable_path/Frameworks",
+        );
+        MACOSX_DEPLOYMENT_TARGET = 12.0;
+        MARKETING_VERSION = 1.0;
+        OTHER_LDFLAGS = (
+          "-framework",
+          SafariServices,
+        );
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock.Extension";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SKIP_INSTALL = YES;
+        STRING_CATALOG_GENERATE_SYMBOLS = YES;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+        SUPPORTS_MACCATALYST = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_EMIT_LOC_STRINGS = YES;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+      };
+      name = Debug;
+    };
+    94CA03392F4CA446005B99CD /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        CODE_SIGN_ENTITLEMENTS = "My AdBlock Extension/My_AdBlock_Extension.entitlements";
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        ENABLE_APP_SANDBOX = YES;
+        ENABLE_HARDENED_RUNTIME = YES;
+        ENABLE_USER_SELECTED_FILES = readonly;
+        GENERATE_INFOPLIST_FILE = YES;
+        INFOPLIST_FILE = "My AdBlock Extension/Info.plist";
+        INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock Extension";
+        INFOPLIST_KEY_NSHumanReadableCopyright = "";
+        IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+        LD_RUNPATH_SEARCH_PATHS = (
+          "$(inherited)",
+          "@executable_path/../Frameworks",
+          "@executable_path/../../../../Frameworks",
+          "@executable_path/Frameworks",
+        );
+        MACOSX_DEPLOYMENT_TARGET = 12.0;
+        MARKETING_VERSION = 1.0;
+        OTHER_LDFLAGS = (
+          "-framework",
+          SafariServices,
+        );
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock.Extension";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SKIP_INSTALL = YES;
+        STRING_CATALOG_GENERATE_SYMBOLS = YES;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+        SUPPORTS_MACCATALYST = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_EMIT_LOC_STRINGS = YES;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+      };
+      name = Release;
+    };
+    94CA033A2F4CA446005B99CD /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+        CLANG_ANALYZER_NONNULL = YES;
+        CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+        CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+        CLANG_ENABLE_MODULES = YES;
+        CLANG_ENABLE_OBJC_ARC = YES;
+        CLANG_ENABLE_OBJC_WEAK = YES;
+        CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+        CLANG_WARN_BOOL_CONVERSION = YES;
+        CLANG_WARN_COMMA = YES;
+        CLANG_WARN_CONSTANT_CONVERSION = YES;
+        CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+        CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+        CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+        CLANG_WARN_EMPTY_BODY = YES;
+        CLANG_WARN_ENUM_CONVERSION = YES;
+        CLANG_WARN_INFINITE_RECURSION = YES;
+        CLANG_WARN_INT_CONVERSION = YES;
+        CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+        CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+        CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+        CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+        CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+        CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+        CLANG_WARN_STRICT_PROTOTYPES = YES;
+        CLANG_WARN_SUSPICIOUS_MOVE = YES;
+        CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+        CLANG_WARN_UNREACHABLE_CODE = YES;
+        CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+        COPY_PHASE_STRIP = NO;
+        DEBUG_INFORMATION_FORMAT = dwarf;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        ENABLE_STRICT_OBJC_MSGSEND = YES;
+        ENABLE_TESTABILITY = YES;
+        ENABLE_USER_SCRIPT_SANDBOXING = YES;
+        GCC_C_LANGUAGE_STANDARD = gnu17;
+        GCC_DYNAMIC_NO_PIC = NO;
+        GCC_NO_COMMON_BLOCKS = YES;
+        GCC_OPTIMIZATION_LEVEL = 0;
+        GCC_PREPROCESSOR_DEFINITIONS = (
+          "DEBUG=1",
+          "$(inherited)",
+        );
+        GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+        GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+        GCC_WARN_UNDECLARED_SELECTOR = YES;
+        GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+        GCC_WARN_UNUSED_FUNCTION = YES;
+        GCC_WARN_UNUSED_VARIABLE = YES;
+        IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+        LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+        MACOSX_DEPLOYMENT_TARGET = 12.0;
+        MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+        MTL_FAST_MATH = YES;
+        ONLY_ACTIVE_ARCH = YES;
+        SDKROOT = auto;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+        SUPPORTS_MACCATALYST = NO;
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+        SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+      };
+      name = Debug;
+    };
+    94CA033B2F4CA446005B99CD /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+        CLANG_ANALYZER_NONNULL = YES;
+        CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+        CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+        CLANG_ENABLE_MODULES = YES;
+        CLANG_ENABLE_OBJC_ARC = YES;
+        CLANG_ENABLE_OBJC_WEAK = YES;
+        CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+        CLANG_WARN_BOOL_CONVERSION = YES;
+        CLANG_WARN_COMMA = YES;
+        CLANG_WARN_CONSTANT_CONVERSION = YES;
+        CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+        CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+        CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+        CLANG_WARN_EMPTY_BODY = YES;
+        CLANG_WARN_ENUM_CONVERSION = YES;
+        CLANG_WARN_INFINITE_RECURSION = YES;
+        CLANG_WARN_INT_CONVERSION = YES;
+        CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+        CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+        CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+        CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+        CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+        CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+        CLANG_WARN_STRICT_PROTOTYPES = YES;
+        CLANG_WARN_SUSPICIOUS_MOVE = YES;
+        CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+        CLANG_WARN_UNREACHABLE_CODE = YES;
+        CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+        COPY_PHASE_STRIP = NO;
+        DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        ENABLE_NS_ASSERTIONS = NO;
+        ENABLE_STRICT_OBJC_MSGSEND = YES;
+        ENABLE_USER_SCRIPT_SANDBOXING = YES;
+        GCC_C_LANGUAGE_STANDARD = gnu17;
+        GCC_NO_COMMON_BLOCKS = YES;
+        GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+        GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+        GCC_WARN_UNDECLARED_SELECTOR = YES;
+        GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+        GCC_WARN_UNUSED_FUNCTION = YES;
+        GCC_WARN_UNUSED_VARIABLE = YES;
+        IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+        LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+        MACOSX_DEPLOYMENT_TARGET = 12.0;
+        MTL_ENABLE_DEBUG_INFO = NO;
+        MTL_FAST_MATH = YES;
+        SDKROOT = auto;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+        SUPPORTS_MACCATALYST = NO;
+        SWIFT_COMPILATION_MODE = wholemodule;
+      };
+      name = Release;
+    };
+    94CA033E2F4CA446005B99CD /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+        CODE_SIGN_STYLE = Automatic;
+        COMBINE_HIDPI_IMAGES = YES;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        ENABLE_APP_SANDBOX = YES;
+        ENABLE_HARDENED_RUNTIME = YES;
+        ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+        ENABLE_USER_SELECTED_FILES = readonly;
+        GENERATE_INFOPLIST_FILE = YES;
+        INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock";
+        INFOPLIST_KEY_NSHumanReadableCopyright = "";
+        "INFOPLIST_KEY_NSPrincipalClass[sdk=macosx*]" = NSApplication;
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+        INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+        INFOPLIST_KEY_UIRequiresFullScreen = YES;
+        INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+        IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+        LD_RUNPATH_SEARCH_PATHS = (
+          "$(inherited)",
+          "@executable_path/../Frameworks",
+          "@executable_path/Frameworks",
+        );
+        MACOSX_DEPLOYMENT_TARGET = 12.0;
+        MARKETING_VERSION = 1.0;
+        OTHER_LDFLAGS = (
+          "-framework",
+          SafariServices,
+          "-framework",
+          WebKit,
+        );
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        REGISTER_APP_GROUPS = YES;
+        STRING_CATALOG_GENERATE_SYMBOLS = YES;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+        SUPPORTS_MACCATALYST = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+        SWIFT_EMIT_LOC_STRINGS = YES;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+      };
+      name = Debug;
+    };
+    94CA033F2F4CA446005B99CD /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+        CODE_SIGN_STYLE = Automatic;
+        COMBINE_HIDPI_IMAGES = YES;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        ENABLE_APP_SANDBOX = YES;
+        ENABLE_HARDENED_RUNTIME = YES;
+        ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+        ENABLE_USER_SELECTED_FILES = readonly;
+        GENERATE_INFOPLIST_FILE = YES;
+        INFOPLIST_KEY_CFBundleDisplayName = "My AdBlock";
+        INFOPLIST_KEY_NSHumanReadableCopyright = "";
+        "INFOPLIST_KEY_NSPrincipalClass[sdk=macosx*]" = NSApplication;
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+        INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+        INFOPLIST_KEY_UIRequiresFullScreen = YES;
+        INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+        IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+        LD_RUNPATH_SEARCH_PATHS = (
+          "$(inherited)",
+          "@executable_path/../Frameworks",
+          "@executable_path/Frameworks",
+        );
+        MACOSX_DEPLOYMENT_TARGET = 12.0;
+        MARKETING_VERSION = 1.0;
+        OTHER_LDFLAGS = (
+          "-framework",
+          SafariServices,
+          "-framework",
+          WebKit,
+        );
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlock";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        REGISTER_APP_GROUPS = YES;
+        STRING_CATALOG_GENERATE_SYMBOLS = YES;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+        SUPPORTS_MACCATALYST = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+        SWIFT_EMIT_LOC_STRINGS = YES;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+      };
+      name = Release;
+    };
+    94CA03412F4CA446005B99CD /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        BUNDLE_LOADER = "$(TEST_HOST)";
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        GENERATE_INFOPLIST_FILE = YES;
+        MACOSX_DEPLOYMENT_TARGET = 26.2;
+        MARKETING_VERSION = 1.0;
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockTests";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        STRING_CATALOG_GENERATE_SYMBOLS = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_EMIT_LOC_STRINGS = NO;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My AdBlock.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/My AdBlock";
+      };
+      name = Debug;
+    };
+    94CA03422F4CA446005B99CD /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        BUNDLE_LOADER = "$(TEST_HOST)";
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        GENERATE_INFOPLIST_FILE = YES;
+        MACOSX_DEPLOYMENT_TARGET = 26.2;
+        MARKETING_VERSION = 1.0;
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockTests";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        STRING_CATALOG_GENERATE_SYMBOLS = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_EMIT_LOC_STRINGS = NO;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My AdBlock.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/My AdBlock";
+      };
+      name = Release;
+    };
+    94CA03442F4CA446005B99CD /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        GENERATE_INFOPLIST_FILE = YES;
+        MARKETING_VERSION = 1.0;
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockUITests";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        STRING_CATALOG_GENERATE_SYMBOLS = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_EMIT_LOC_STRINGS = NO;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TEST_TARGET_NAME = "My AdBlock";
+      };
+      name = Debug;
+    };
+    94CA03452F4CA446005B99CD /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 1;
+        DEVELOPMENT_TEAM = FM5TRY23R3;
+        GENERATE_INFOPLIST_FILE = YES;
+        MARKETING_VERSION = 1.0;
+        PRODUCT_BUNDLE_IDENTIFIER = "com.lyy.My-AdBlockUITests";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        STRING_CATALOG_GENERATE_SYMBOLS = NO;
+        SWIFT_APPROACHABLE_CONCURRENCY = YES;
+        SWIFT_EMIT_LOC_STRINGS = NO;
+        SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+        SWIFT_VERSION = 5.0;
+        TEST_TARGET_NAME = "My AdBlock";
+      };
+      name = Release;
+    };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		94CA02E82F4CA445005B99CD /* Build configuration list for PBXProject "My AdBlock" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94CA033A2F4CA446005B99CD /* Debug */,
-				94CA033B2F4CA446005B99CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94CA03372F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94CA03382F4CA446005B99CD /* Debug */,
-				94CA03392F4CA446005B99CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94CA033D2F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94CA033E2F4CA446005B99CD /* Debug */,
-				94CA033F2F4CA446005B99CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94CA03402F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94CA03412F4CA446005B99CD /* Debug */,
-				94CA03422F4CA446005B99CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94CA03432F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94CA03442F4CA446005B99CD /* Debug */,
-				94CA03452F4CA446005B99CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
+    94CA02E82F4CA445005B99CD /* Build configuration list for PBXProject "My AdBlock" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        94CA033A2F4CA446005B99CD /* Debug */,
+        94CA033B2F4CA446005B99CD /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+    94CA03372F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock Extension" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        94CA03382F4CA446005B99CD /* Debug */,
+        94CA03392F4CA446005B99CD /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+    94CA033D2F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlock" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        94CA033E2F4CA446005B99CD /* Debug */,
+        94CA033F2F4CA446005B99CD /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+    94CA03402F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockTests" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        94CA03412F4CA446005B99CD /* Debug */,
+        94CA03422F4CA446005B99CD /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+    94CA03432F4CA446005B99CD /* Build configuration list for PBXNativeTarget "My AdBlockUITests" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        94CA03442F4CA446005B99CD /* Debug */,
+        94CA03452F4CA446005B99CD /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
 /* End XCConfigurationList section */
-	};
-	rootObject = 94CA02E52F4CA445005B99CD /* Project object */;
+  };
+  rootObject = 94CA02E52F4CA445005B99CD /* Project object */;
 }

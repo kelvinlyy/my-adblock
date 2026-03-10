@@ -78,6 +78,7 @@ function reportBlocked(url, matchedRule, ruleType) {
     browser.runtime.sendMessage({
         type: "reportBlocked",
         url,
+        pageHostname: location.hostname,
         matchedRule,
         ruleType,
     }).catch(() => {

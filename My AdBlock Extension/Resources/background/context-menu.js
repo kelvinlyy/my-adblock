@@ -7,20 +7,6 @@
 const menus = browser.contextMenus || browser.menus;
 const CONTEXT_MENU_ID = "my-adblock-block-host";
 
-if (menus) {
-    try {
-        menus.create({
-            id: CONTEXT_MENU_ID,
-            title: "My AdBlock - Block this hostname",
-            contexts: ["page", "link", "image", "video", "audio", "selection", "editable", "frame"],
-        });
-    } catch (e) {
-        console.warn("[My AdBlock] Failed to create context menu:", e);
-    }
-} else {
-    console.warn("[My AdBlock] Context menus API not available.");
-}
-
 /**
  * Extract the most relevant hostname from the context menu click info.
  * Priority: element src URL → link URL → frame URL → page URL.
@@ -39,33 +25,70 @@ function extractHostname(info, tab) {
     return null;
 }
 
-if (menus && menus.onClicked) {
-menus.onClicked.addListener(async (info, tab) => {
+/**
+ * Handle context menu click — show confirmation via content script,
+ * or add rule directly if content script is unavailable.
+ */
+let _contextMenuBusy = false;
+
+async function handleContextMenuClick(info, tab) {
     if (info.menuItemId !== CONTEXT_MENU_ID) return;
+    if (_contextMenuBusy) return;
+    _contextMenuBusy = true;
 
-    const hostname = extractHostname(info, tab);
-    if (!hostname) return;
-
-    // Resolve target tab
-    let tabId = tab?.id;
-    if (tabId === undefined) {
-        try {
-            const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
-            tabId = activeTab?.id;
-        } catch {
-            // ignore
-        }
-    }
-    if (tabId === undefined) return;
-
-    // Ask content script to show confirmation dialog
     try {
-        await browser.tabs.sendMessage(tabId, {
-            type: "confirmBlockHost",
-            hostname,
+        let hostname = extractHostname(info, tab);
+
+        // Resolve target tab
+        let tabId = tab?.id;
+        if (tabId === undefined || !hostname) {
+            try {
+                const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
+                if (!tabId) tabId = activeTab?.id;
+                if (!hostname && activeTab?.url) {
+                    try { hostname = new URL(activeTab.url).hostname; } catch {}
+                }
+            } catch {
+                // ignore
+            }
+        }
+
+        if (!hostname || tabId === undefined) return;
+
+        // Try content script first, fall back to direct add
+        try {
+            await Promise.race([
+                browser.tabs.sendMessage(tabId, {
+                    type: "confirmBlockHost",
+                    hostname,
+                }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 2000)),
+            ]);
+        } catch (e) {
+            // Content script not available or timed out — add rule directly
+            try {
+                await addCustomRule("host", hostname);
+            } catch (_) {}
+        }
+    } finally {
+        _contextMenuBusy = false;
+    }
+}
+
+if (menus) {
+    try {
+        menus.create({
+            id: CONTEXT_MENU_ID,
+            title: "My AdBlock - Block this hostname",
+            contexts: ["page", "link", "image", "video", "audio", "selection", "editable", "frame"],
         });
     } catch (e) {
-        console.error("[My AdBlock] Failed to send confirmBlockHost to content script:", e);
+        console.warn("[My AdBlock] Failed to create context menu:", e);
     }
-});
-} // end if (menus && menus.onClicked)
+
+    if (menus.onClicked) {
+        menus.onClicked.addListener(handleContextMenuClick);
+    }
+} else {
+    console.warn("[My AdBlock] Context menus API not available.");
+}

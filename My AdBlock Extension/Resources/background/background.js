@@ -12,7 +12,7 @@
 browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
     switch (message.type) {
         case "reportBlocked":
-            recordBlocked(message.url, message.matchedRule, message.ruleType);
+            recordBlocked(message.url, message.matchedRule, message.ruleType, message.pageHostname, _sender.tab?.id);
             return Promise.resolve({ ok: true });
 
         case "getBlocklist":
@@ -21,10 +21,10 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
             }));
 
         case "getStats":
-            return getAllTimeBlockedCount().then((allTime) => ({
-                ...getSessionStats(),
-                allTimeBlocked: allTime,
-            }));
+            return (async () => {
+                const stats = getSessionStats(message.tabId);
+                return stats;
+            })();
 
         case "clearSession":
             clearSession();
@@ -44,6 +44,20 @@ browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
 
         case "exportRules":
             return exportRules();
+
+        case "downloadExport":
+            return (async () => {
+                try {
+                    const resp = await browser.runtime.sendNativeMessage("application.id", {
+                        action: "exportRules",
+                        json: message.text,
+                        filename: message.filename,
+                    });
+                    return resp;
+                } catch (e) {
+                    return { error: e.message };
+                }
+            })();
 
         case "importRulesBatch":
             return importRulesBatch(message.rules);

@@ -193,8 +193,10 @@ ruleTypeSelect.addEventListener("change", () => {
 });
 
 // ---------------------
-// Export rules (EasyList text format via native messaging)
+// Export rules (macOS: save to Downloads via native messaging, iOS: copy to clipboard)
 // ---------------------
+
+const isMacOS = /Macintosh/.test(navigator.userAgent);
 
 exportRulesBtn.addEventListener("click", async () => {
     try {
@@ -205,23 +207,31 @@ exportRulesBtn.addEventListener("click", async () => {
         }
 
         const text = result.data.text;
-        const filename = `my-adblock-rules-${new Date().toISOString().slice(0, 10)}.txt`;
+        const count = result.data.count;
 
-        const nativeResp = await browser.runtime.sendNativeMessage("application.id", {
-            action: "exportRules",
-            json: text,
-            filename,
-        });
+        if (isMacOS) {
+            const filename = `my-adblock-rules-${new Date().toISOString().slice(0, 10)}.txt`;
+            const dlResult = await browser.runtime.sendMessage({
+                type: "downloadExport",
+                text,
+                filename,
+            });
 
-        if (nativeResp.error) {
-            showToast(nativeResp.error);
-            return;
+            if (dlResult.error) {
+                showToast(dlResult.error);
+                return;
+            }
+
+            showToast(
+                `${count} rule(s) exported to ${dlResult.path || "Downloads"}.`,
+                { isError: false }
+            );
+        } else {
+            // iOS: open in a new tab so user can share/save via Safari share sheet
+            const dataUrl = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
+            await browser.tabs.create({ url: dataUrl });
+            showToast(`${count} rule(s) exported. Use the share button to save.`, { isError: false });
         }
-
-        showToast(
-            `${result.data.count} rule(s) exported to ${nativeResp.path || "Downloads"}.`,
-            { isError: false }
-        );
     } catch (e) {
         showToast(`Export failed: ${e.message}`);
         console.error(e);

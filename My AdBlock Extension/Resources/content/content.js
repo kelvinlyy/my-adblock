@@ -284,13 +284,18 @@
     // Handle confirmBlockHost from background.js (macOS context menu)
     // ===========================================================
 
+    let _blockModalOpen = false;
+
     browser.runtime.onMessage.addListener((message, _sender) => {
-        if (message.type !== "confirmBlockHost") return false;
+        if (message.type !== "confirmBlockHost") return;
+        if (_blockModalOpen) return Promise.resolve({ busy: true });
+        _blockModalOpen = true;
 
         const iframeHost = findIframeHostname(lastContextMenuTarget);
         const hostname = iframeHost || message.hostname;
 
         return showBlockConfirmModal(hostname).then((host) => {
+            _blockModalOpen = false;
             if (!host) return { dismissed: true };
 
             return browser.runtime.sendMessage({
@@ -307,6 +312,7 @@
                 return { ok: true };
             });
         }).catch((e) => {
+            _blockModalOpen = false;
             console.error("[My AdBlock] Failed to add rule from context menu:", e);
             return { error: e.message };
         });

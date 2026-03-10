@@ -68,6 +68,7 @@ clearSessionBtn.addEventListener("click", async () => {
     try {
         await browser.runtime.sendMessage({ type: "clearSession" });
         sessionCountEl.textContent = "0";
+        siteCountEl.textContent = "0";
         currentBlockedRequests = [];
         renderBlockedList([]);
     } catch (e) {

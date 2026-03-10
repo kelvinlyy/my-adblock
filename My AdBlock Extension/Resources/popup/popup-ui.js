@@ -31,12 +31,19 @@ function showToast(msg, { isError = true } = {}) {
 // Toggle section expand / collapse
 // ---------------------
 
-function setupToggle(toggleBtn, arrowEl, bodyEl) {
+function setupToggle(toggleBtn, arrowEl, bodyEl, otherArrowEl, otherBodyEl) {
     toggleBtn.addEventListener("click", () => {
         const isCollapsed = bodyEl.classList.contains("collapsed");
         bodyEl.classList.toggle("collapsed", !isCollapsed);
         bodyEl.classList.toggle("expanded", isCollapsed);
         arrowEl.classList.toggle("expanded", isCollapsed);
+
+        // Collapse the other section when expanding this one
+        if (isCollapsed && otherBodyEl && otherBodyEl.classList.contains("expanded")) {
+            otherBodyEl.classList.remove("expanded");
+            otherBodyEl.classList.add("collapsed");
+            otherArrowEl.classList.remove("expanded");
+        }
     });
 }
 

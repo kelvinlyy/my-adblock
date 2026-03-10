@@ -13,15 +13,24 @@ const STATS_REFRESH_INTERVAL_MS = 3000;
 // ---------------------
 // Wire up section toggles
 // ---------------------
+const blockedArrow = document.getElementById("blockedArrow");
+const blockedBody = document.getElementById("blockedBody");
+const rulesArrow = document.getElementById("rulesArrow");
+const rulesBody = document.getElementById("rulesBody");
+
 setupToggle(
     document.getElementById("blockedToggle"),
-    document.getElementById("blockedArrow"),
-    document.getElementById("blockedBody")
+    blockedArrow,
+    blockedBody,
+    rulesArrow,
+    rulesBody
 );
 setupToggle(
     document.getElementById("rulesToggle"),
-    document.getElementById("rulesArrow"),
-    document.getElementById("rulesBody")
+    rulesArrow,
+    rulesBody,
+    blockedArrow,
+    blockedBody
 );
 
 // ---------------------
