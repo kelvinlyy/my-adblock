@@ -8,7 +8,6 @@
 #if os(macOS)
 import Cocoa
 
-@main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
@@ -36,7 +35,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 #elseif os(iOS)
 import UIKit
 
-@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
