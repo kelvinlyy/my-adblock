@@ -41,3 +41,13 @@ loadCustomRules();
 
 // Auto-refresh stats while popup is open
 setInterval(loadStats, STATS_REFRESH_INTERVAL_MS);
+
+// ---------------------
+// Safari iOS popover sizing fix
+// Ensure the popover reads the correct intrinsic content size
+// ---------------------
+(function fixPopoverSize() {
+    document.documentElement.style.width = "100%";
+    document.body.style.maxWidth = "400px";
+    document.body.style.margin = "0 auto";
+})();

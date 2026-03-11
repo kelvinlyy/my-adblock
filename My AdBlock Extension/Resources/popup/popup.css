@@ -60,8 +60,14 @@
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+    min-height: 100%;
+}
+
 body {
     width: 360px;
+    min-width: 320px;
     max-width: 100%;
     margin: 0 auto;
     max-height: 520px;
@@ -71,6 +77,19 @@ body {
     line-height: 1.4;
     color: var(--text-primary);
     background: var(--bg-primary);
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Safari iOS/iPadOS popover sizing */
+@supports (-webkit-touch-callout: none) {
+    body {
+        width: 100%;
+        max-width: 400px;
+        min-width: 320px;
+        margin: 0 auto;
+        max-height: none;
+        overflow-y: visible;
+    }
 }
 
 /* ---------------------
@@ -300,11 +319,18 @@ body {
 
 .rule-form {
     display: flex;
+    flex-wrap: nowrap;
     gap: 6px;
     margin-bottom: 8px;
 }
 
+.rule-form .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
 .rule-select {
+    flex-shrink: 0;
     padding: 6px 8px;
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -318,6 +344,7 @@ body {
 
 .rule-input {
     flex: 1;
+    min-width: 0;
     padding: 6px 10px;
     border: 1px solid var(--border);
     border-radius: 6px;
